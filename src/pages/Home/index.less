@@ -1,0 +1,106 @@
+.home-warp {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+
+  .search-warp {
+    flex: 1;
+    background: red;
+    .search {
+      margin: 0 0.625rem; // 10px
+      border-radius: 0.9375rem; // 15
+      background: red;
+    }
+    .search::-webkit-input-placeholder {
+      color: white;
+    }
+    .search:-moz-placeholder {
+      color: white;
+    }
+    .search:-ms-input-placeholder {
+      color: white;
+    }
+  }
+  .content-warp {
+    flex: 12;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background: cyan;
+
+    .type {
+      flex: 1;
+      border-right: 1px solid red;
+      background: pink;
+    }
+
+    .type-detail {
+      flex: 5;
+      width: 100%;
+      background: orange;
+      .every-last {
+        width: 100%;
+        height: 5rem; // 80px
+        border: 0.0625rem solid pink;
+        display: flex;
+        flex-direction: row;
+        background: palevioletred;
+
+        .every-img {
+          flex: 2;
+          // width: 100%;
+          // height: 100%;
+          background: royalblue;
+
+          .img{
+            width: 100%;
+            height: 100%;
+            background-image: url('../../assets/tab-bar/cart.png');
+            background-size: 100%;
+            background-repeat: no-repeat;
+          }
+        }
+
+        .every-title {
+          flex: 4;
+          // width: 100%;
+          // height: 100%;
+          background: seagreen;
+
+          .title{
+            margin: .3125rem;
+            display: flex;
+            flex-direction: column;
+            view{
+              flex: 1;
+            }
+            .addPic{
+              .test{
+                float: right;
+                // display: inline-block;
+              }
+              .addImg{
+                width: 1.575rem;
+                height: 1.575rem;
+                background-image: url('../../assets/static/add.png');
+                background-size: 100%;
+                background-repeat: no-repeat;
+              }
+              .reduceImg{
+                width: 1.575rem;
+                height: 1.575rem;
+                background-image: url('../../assets/static/reduce.png');
+                background-size: 100%;
+                background-repeat: no-repeat;
+              }
+              .itemNum{
+                margin: 0 .5125rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

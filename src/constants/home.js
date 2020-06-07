@@ -1,0 +1,2 @@
+export const ADD_COMMODITY = 'ADD_COMMODITY';
+export const REDUCE_COMMODITY = 'REDUCE_COMMODITY';
