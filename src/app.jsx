@@ -28,6 +28,7 @@ class App extends Component {
       'pages/Home/index',
       'pages/Cart/index',
       'pages/User/index',
+      'pages/commodityDetail/index'
 
     ],
     window: {

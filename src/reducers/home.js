@@ -5,7 +5,7 @@ const INITIAL_STATE = {
   commodityList: {
     热搜推荐: [
       {
-        url: "https://jdc.jd.com/img/200",
+        url: "https://source.unsplash.com/random",
         name: "花露水",
         count: 100,
         id: Math.random(),
@@ -14,7 +14,7 @@ const INITIAL_STATE = {
         
       },
       {
-        url: "https://jdc.jd.com/img/200",
+        url: "https://source.unsplash.com/random",
         name: "驱蚊片",
         count: 200,
         id: Math.random(),
@@ -24,7 +24,7 @@ const INITIAL_STATE = {
     ],
     个护清洁: [
       {
-        url: "https://jdc.jd.com/img/200",
+        url: "https://source.unsplash.com/random",
         name: "飘柔洗发露",
         count: 150,
         id: Math.random(),
@@ -32,7 +32,7 @@ const INITIAL_STATE = {
         selected: 0
       },
       {
-        url: "https://jdc.jd.com/img/200",
+        url: "https://source.unsplash.com/random",
         name: "舒肤佳沐浴露",
         count: 150,
         id: Math.random(),
@@ -40,7 +40,7 @@ const INITIAL_STATE = {
         selected: 0
       },
       {
-        url: "https://jdc.jd.com/img/200",
+        url: "https://source.unsplash.com/random",
         name: "舒肤佳香皂",
         count: 150,
         id: Math.random(),
@@ -50,7 +50,7 @@ const INITIAL_STATE = {
     ],
     食品酒水: [
       {
-        url: "https://jdc.jd.com/img/200",
+        url: "https://source.unsplash.com/random",
         name: "老坛酸菜牛肉面",
         count: 150,
         id: Math.random(),
@@ -58,7 +58,7 @@ const INITIAL_STATE = {
         selected: 0
       },
       {
-        url: "https://jdc.jd.com/img/200",
+        url: "https://source.unsplash.com/random",
         name: "红烧牛肉面",
         count: 150,
         id: Math.random(),
@@ -66,7 +66,7 @@ const INITIAL_STATE = {
         selected: 0
       },
       {
-        url: "https://jdc.jd.com/img/200",
+        url: "https://source.unsplash.com/random",
         name: "汤达人泡面",
         count: 150,
         id: Math.random(),

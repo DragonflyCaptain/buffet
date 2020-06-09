@@ -66,16 +66,12 @@ class Home extends Component {
   config = {
     navigationBarTitleText: "小卖部",
   };
-  onScrollToUpper() {}
-  onScroll(e) {
-    console.log(e.detail);
-  }
 
   handleTypeClick(item) {
-      console.log(Taro.scanCode)
-      Taro.scanCode().then(res=>{
-          console.log(res)
-      })
+    // console.log(Taro.scanCode)
+    // Taro.scanCode().then(res=>{
+    //     console.log(res)
+    // })
     this.setState({
       typeContent: item,
     });
@@ -108,7 +104,7 @@ class Home extends Component {
       name: item.name,
       type,
       index,
-      item
+      item,
     };
     this.props.addCommodity(obj);
   }
@@ -118,27 +114,30 @@ class Home extends Component {
       name: item.name,
       type,
       index,
-      item
+      item,
     };
     this.props.reduceCommodity(obj);
   }
 
-  renderTypeDetail = (str) => {
-    const { typeContent } = this.state;
+  goToDetail = (obj) => {
+    console.log(obj);
+    let newObj = JSON.stringify(obj)
+    Taro.navigateTo({
+      url: `../commodityDetail/index?params=${newObj}`
+    })
+  };
 
+  renderTypeDetail = (str, img) => {
+    const { typeContent } = this.state;
     const { addToCart } = this.props;
     const { commodityList } = addToCart;
     let data = commodityList[typeContent] || commodityList[str];
     if (data.length) {
       return data.map((item, index) => {
         return (
-          <View
-            key={item.id}
-            className="every-last"
-            // onClick={() => this.handleAdd(item, index)}
-          >
-            <View className="every-img">
-              <View className="img"></View>
+          <View key={item.id} className="every-last">
+            <View className="every-img" onClick={() => this.goToDetail(item)}>
+              <View  style={img}></View>
             </View>
             <View className="every-title">
               <View className="title">
@@ -158,7 +157,6 @@ class Home extends Component {
                       onClick={() => this.reduceItem(item, index, typeContent)}
                     ></View>
                   ) : null}
-                  
                 </View>
               </View>
             </View>
@@ -176,6 +174,14 @@ class Home extends Component {
       height: "30px",
       "font-size": "12px",
       padding: "3px",
+
+    };
+    const img = {
+      width: "100%",
+      height: "100%",
+      "background-image": "url(https://source.unsplash.com/random)",
+      "background-size": "100%",
+      "background-repeat": "no-repeat"
     };
     return (
       <View className="home-warp">
@@ -187,7 +193,7 @@ class Home extends Component {
             {this.renderScrollList(dataList, scrollItem)}
           </View>
           <View className="type-detail">
-            {this.renderTypeDetail("热搜推荐")}
+            {this.renderTypeDetail("热搜推荐", img)}
           </View>
         </View>
       </View>
