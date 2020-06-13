@@ -1,8 +1,9 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Text } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
-import { AtButton } from "taro-ui";
-import { add, minus, asyncAdd } from "../../actions/count";
+import { AtButton, AtCard } from "taro-ui";
+import { addSelect, reduceSelect } from "../../actions/home";
+
 import "./index.less";
 
 @connect(
@@ -12,10 +13,10 @@ import "./index.less";
   }),
   (dispatch) => ({
     add(num) {
-      dispatch(add(num));
+      dispatch(addSelect(num));
     },
     dec(num) {
-      dispatch(minus(num));
+      dispatch(reduceSelect(num));
     },
   })
 )
@@ -41,20 +42,32 @@ class Cart extends Component {
     navigationBarTitleText: "购物车",
   };
 
-  handleAdd = () => {
-    this.props.add(5);
+  cartAdd = (item, index) => {
+    let obj = {
+      name: item.name,
+      index,
+      item,
+    };
+    this.props.add(obj);
+    console.log("购物车增加", this.props);
   };
 
-  handleDec = () => {
-    this.props.dec(4);
+  cartReduce = (item, index) => {
+    let obj = {
+      name: item.name,
+      index,
+      item,
+    };
+    this.props.dec(obj);
+    console.log("购物车减少");
   };
 
   renderSelectedCart = (data) => {
     return (
       data &&
       data.length &&
-      data.map((item) => {
-        console.log(item, item.price, '))))______')
+      data.map((item, index) => {
+        console.log(item, item.price, "))))______");
         if (item.selected === 0) return false;
         return (
           <View className="cartItem" key={item.id}>
@@ -67,7 +80,7 @@ class Cart extends Component {
               <View className="addPic">
                 <View
                   className="test addImg"
-                  onClick={() => this.addItem(item, index, typeContent)}
+                  onClick={() => this.cartAdd(item, index)}
                 ></View>
                 {item.selected !== 0 ? (
                   <View className="test itemNum">{item.selected}</View>
@@ -75,7 +88,7 @@ class Cart extends Component {
                 {item.selected ? (
                   <View
                     className="test reduceImg "
-                    onClick={() => this.reduceItem(item, index, typeContent)}
+                    onClick={() => this.cartReduce(item, index)}
                   ></View>
                 ) : null}
               </View>
@@ -96,15 +109,19 @@ class Cart extends Component {
     } = this.props;
     return (
       <View className="home">
-        {/* CartPage
-        <AtButton type="primary" onClick={this.handleAdd}>
-          加
-        </AtButton>
-        <Text>{num}</Text>
-        <AtButton type="primary" onClick={this.handleDec}>
-          >减
-        </AtButton> */}
-        {this.renderSelectedCart(cartSum)}
+        <AtCard
+          // note="小Tips"
+          extra={`已选择${cartSum.length}件商品`}
+          title="购物车"
+          thumb="http://www.logoquan.com/upload/list/20180421/logoquan15259400209.PNG"
+        >
+          {this.renderSelectedCart(cartSum)}
+        </AtCard>
+        <View className="goToPay">
+          <View className="goToPayBtn">
+            去结算({cartSum.length})
+          </View>
+        </View>
       </View>
     );
   }

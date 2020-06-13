@@ -1,4 +1,4 @@
-import { ADD_COMMODITY, REDUCE_COMMODITY } from "../constants/home";
+import { ADD_COMMODITY, REDUCE_COMMODITY, ADD_SELECT, REDUCE_SELECT } from "../constants/home";
 
 export const addCommodity = payload => {
   return {
@@ -13,3 +13,18 @@ export const reduceCommodity = payload => {
     payload
   };
 };
+
+export const addSelect = payload => {
+  return {
+    type: ADD_SELECT,
+    payload
+  }
+}
+
+
+export const reduceSelect = payload => {
+  return {
+    type: REDUCE_SELECT,
+    payload
+  }
+}

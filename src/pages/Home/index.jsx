@@ -1,6 +1,6 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Text } from "@tarojs/components";
-import { AtAvatar } from "taro-ui";
+import { AtAvatar, AtSearchBar, AtFab } from "taro-ui";
 import { connect } from "@tarojs/redux";
 import { addCommodity, reduceCommodity } from "../../actions/home";
 import "./index.less";
@@ -121,10 +121,10 @@ class Home extends Component {
 
   goToDetail = (obj) => {
     console.log(obj);
-    let newObj = JSON.stringify(obj)
+    let newObj = JSON.stringify(obj);
     Taro.navigateTo({
-      url: `../commodityDetail/index?params=${newObj}`
-    })
+      url: `../commodityDetail/index?params=${newObj}`,
+    });
   };
 
   renderTypeDetail = (str, img) => {
@@ -137,7 +137,7 @@ class Home extends Component {
         return (
           <View key={item.id} className="every-last">
             <View className="every-img" onClick={() => this.goToDetail(item)}>
-              <View  style={img}></View>
+              <View style={img}></View>
             </View>
             <View className="every-title">
               <View className="title">
@@ -174,19 +174,22 @@ class Home extends Component {
       height: "30px",
       "font-size": "12px",
       padding: "3px",
-
     };
     const img = {
       width: "100%",
       height: "100%",
       "background-image": "url(https://source.unsplash.com/random)",
       "background-size": "100%",
-      "background-repeat": "no-repeat"
+      "background-repeat": "no-repeat",
     };
     return (
       <View className="home-warp">
         <View className="search-warp">
-          <Input type="text" className="search" placeholder="搜索商品" />
+          {/* <Input type="text" className="search" placeholder="搜索商品" /> */}
+          <AtSearchBar
+            // value={this.state.value}
+            // onChange={this.onChange.bind(this)}
+          />
         </View>
         <View className="content-warp">
           <View className="type">
@@ -196,6 +199,7 @@ class Home extends Component {
             {this.renderTypeDetail("热搜推荐", img)}
           </View>
         </View>
+        
       </View>
     );
   }

@@ -1,4 +1,9 @@
-import { ADD_COMMODITY, REDUCE_COMMODITY } from "../constants/home";
+import {
+  ADD_COMMODITY,
+  REDUCE_COMMODITY,
+  ADD_SELECT,
+  REDUCE_SELECT,
+} from "../constants/home";
 
 const INITIAL_STATE = {
   cartSum: [],
@@ -10,8 +15,7 @@ const INITIAL_STATE = {
         count: 100,
         id: Math.random(),
         price: 30,
-        selected: 0
-        
+        selected: 0,
       },
       {
         url: "https://source.unsplash.com/random",
@@ -19,7 +23,7 @@ const INITIAL_STATE = {
         count: 200,
         id: Math.random(),
         price: 30,
-        selected: 0
+        selected: 0,
       },
     ],
     个护清洁: [
@@ -29,7 +33,7 @@ const INITIAL_STATE = {
         count: 150,
         id: Math.random(),
         price: 30,
-        selected: 0
+        selected: 0,
       },
       {
         url: "https://source.unsplash.com/random",
@@ -37,7 +41,7 @@ const INITIAL_STATE = {
         count: 150,
         id: Math.random(),
         price: 30,
-        selected: 0
+        selected: 0,
       },
       {
         url: "https://source.unsplash.com/random",
@@ -45,7 +49,7 @@ const INITIAL_STATE = {
         count: 150,
         id: Math.random(),
         price: 30,
-        selected: 0
+        selected: 0,
       },
     ],
     食品酒水: [
@@ -55,7 +59,7 @@ const INITIAL_STATE = {
         count: 150,
         id: Math.random(),
         price: 30,
-        selected: 0
+        selected: 0,
       },
       {
         url: "https://source.unsplash.com/random",
@@ -63,7 +67,7 @@ const INITIAL_STATE = {
         count: 150,
         id: Math.random(),
         price: 30,
-        selected: 0
+        selected: 0,
       },
       {
         url: "https://source.unsplash.com/random",
@@ -71,54 +75,98 @@ const INITIAL_STATE = {
         count: 150,
         id: Math.random(),
         price: 30,
-        selected: 0
+        selected: 0,
       },
     ],
-  }
-}
+  },
+};
 
 const addData = (state, obj) => {
-    let type = obj.type;
-    let index = obj.index
-    console.log(obj, 'addData')
-    let newObj = state;
-    newObj[type][index].selected += 1
-    return newObj;
-}
+  let type = obj.type;
+  let index = obj.index;
+  console.log(obj, "addData");
+  let newObj = state;
+  newObj[type][index].selected += 1;
+  return newObj;
+};
 
 const reduceData = (state, obj) => {
-    let type = obj.type;
-    let index = obj.index
-    console.log(obj, 'addData')
-    let newObj = state;
-    newObj[type][index].selected -= 1
-    return newObj;
-}
+  let type = obj.type;
+  let index = obj.index;
+  console.log(obj, "addData");
+  let newObj = state;
+  newObj[type][index].selected -= 1;
+  return newObj;
+};
 
-const renderCart = (data, obj) => {
-    let item = obj.item
-    if(!data.includes(item)){
-        data.push(item)
+const renderCartAdd = (data, obj) => {
+  let item = obj.item;
+  console.log(item, "________");
+  if (!data.includes(item)) {
+    data.push(item);
+  }
+  return data;
+};
+
+const renderCartReduce = (data, obj) => {
+  let item = obj.item;
+  if (item.selected < 1) {
+    data.forEach((val, index) => {
+      if (val.name === item.name) {
+        data.splice(index, 1);
+      }
+    });
+  }
+  return data;
+};
+
+const renderAddSelect = (data, obj) => {
+  data.forEach(item=>{
+    if(item.name === obj.name){
+      item.selected+=1
     }
-    return data
+  })
+  return data
+};
+
+const renderReduceSelect = (data, obj) => {
+  data.forEach((item, index)=>{
+    if(item.name === obj.name){
+      item.selected-=1
+      if(item.selected<1){
+        data.splice(index, 1)
+      }
+    }
+  })
+  return data
 }
 
-
-export default function addToCart (state = INITIAL_STATE, action) {
-    console.log(action, 'action')
+export default function addToCart(state = INITIAL_STATE, action) {
+  console.log(action, "action");
   switch (action.type) {
     case ADD_COMMODITY:
       return {
         ...state,
         commodityList: addData(state.commodityList, action.payload),
-        cartSum: renderCart(state.cartSum, action.payload)
-      }
+        cartSum: renderCartAdd(state.cartSum, action.payload),
+      };
     case REDUCE_COMMODITY:
       return {
         ...state,
-        commodityList: reduceData(state.commodityList, action.payload)
-      }
+        commodityList: reduceData(state.commodityList, action.payload),
+        cartSum: renderCartReduce(state.cartSum, action.payload),
+      };
+    case ADD_SELECT:
+      return {
+        ...state,
+        cartSum: renderAddSelect(state.cartSum, action.payload),
+      };
+    case REDUCE_SELECT:
+      return {
+        ...state,
+        cartSum: renderReduceSelect(state.cartSum, action.payload),
+      };
     default:
-      return state
+      return state;
   }
 }
