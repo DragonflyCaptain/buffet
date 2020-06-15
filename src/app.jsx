@@ -3,7 +3,7 @@ import { Provider } from '@tarojs/redux'
 import Index from "./pages/index";
 import configStore from './store'
 
-// import "./app.less";
+import "./app.less";
 import 'taro-ui/dist/style/index.scss'
 
 const store = configStore()
@@ -28,7 +28,10 @@ class App extends Component {
       'pages/Home/index',
       'pages/Cart/index',
       'pages/User/index',
-      'pages/commodityDetail/index'
+      'pages/commodityDetail/index',
+      'pages/orderPay/index',
+      'pages/Address/addressList',
+      'pages/Address/editAddress',
 
     ],
     window: {

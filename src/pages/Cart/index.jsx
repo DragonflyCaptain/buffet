@@ -62,7 +62,7 @@ class Cart extends Component {
     console.log("购物车减少");
   };
 
-  renderSelectedCart = (data) => {
+  renderSelectedCart = (data, img) => {
     return (
       data &&
       data.length &&
@@ -72,7 +72,7 @@ class Cart extends Component {
         return (
           <View className="cartItem" key={item.id}>
             <View className="cartImgWarp">
-              <View className="cartImg"></View>
+              <View style={img}></View>
             </View>
             <View className="cartContent">
               <View>名称：{item.name}</View>
@@ -99,14 +99,27 @@ class Cart extends Component {
     );
   };
 
+  goToPayPage = () => {
+    // console.log('去结算了')
+    Taro.navigateTo({
+      url: `../orderPay/index`,
+    });
+  }
+
   render() {
-    console.log(this.props, "LLLLL");
     const {
       count: { num },
       add,
       dec,
       addToCart: { cartSum },
     } = this.props;
+    const img = {
+      width: "100%",
+      height: "100%",
+      "background-image": "url(https://source.unsplash.com/random)",
+      "background-size": "100%",
+      "background-repeat": "no-repeat",
+    };
     return (
       <View className="home">
         <AtCard
@@ -115,13 +128,13 @@ class Cart extends Component {
           title="购物车"
           thumb="http://www.logoquan.com/upload/list/20180421/logoquan15259400209.PNG"
         >
-          {this.renderSelectedCart(cartSum)}
+          {this.renderSelectedCart(cartSum, img)}
         </AtCard>
-        <View className="goToPay">
-          <View className="goToPayBtn">
-            去结算({cartSum.length})
+        {cartSum.length ? (
+          <View className="goToPay">
+            <View className="goToPayBtn" onClick={this.goToPayPage}>去结算({cartSum.length})</View>
           </View>
-        </View>
+        ) : null}
       </View>
     );
   }

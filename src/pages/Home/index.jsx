@@ -199,7 +199,6 @@ class Home extends Component {
             {this.renderTypeDetail("热搜推荐", img)}
           </View>
         </View>
-        
       </View>
     );
   }
