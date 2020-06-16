@@ -3,6 +3,7 @@ import {
   REDUCE_COMMODITY,
   ADD_SELECT,
   REDUCE_SELECT,
+  SAVE_USER_INFO,
 } from "../constants/home";
 
 const INITIAL_STATE = {
@@ -79,6 +80,7 @@ const INITIAL_STATE = {
       },
     ],
   },
+  userInfo: {},
 };
 
 const addData = (state, obj) => {
@@ -121,28 +123,27 @@ const renderCartReduce = (data, obj) => {
 };
 
 const renderAddSelect = (data, obj) => {
-  data.forEach(item=>{
-    if(item.name === obj.name){
-      item.selected+=1
+  data.forEach((item) => {
+    if (item.name === obj.name) {
+      item.selected += 1;
     }
-  })
-  return data
+  });
+  return data;
 };
 
 const renderReduceSelect = (data, obj) => {
-  data.forEach((item, index)=>{
-    if(item.name === obj.name){
-      item.selected-=1
-      if(item.selected<1){
-        data.splice(index, 1)
+  data.forEach((item, index) => {
+    if (item.name === obj.name) {
+      item.selected -= 1;
+      if (item.selected < 1) {
+        data.splice(index, 1);
       }
     }
-  })
-  return data
-}
+  });
+  return data;
+};
 
 export default function addToCart(state = INITIAL_STATE, action) {
-  console.log(action, "action");
   switch (action.type) {
     case ADD_COMMODITY:
       return {
@@ -165,6 +166,11 @@ export default function addToCart(state = INITIAL_STATE, action) {
       return {
         ...state,
         cartSum: renderReduceSelect(state.cartSum, action.payload),
+      };
+    case SAVE_USER_INFO:
+      return {
+        ...state,
+        userInfo: action.payload,
       };
     default:
       return state;

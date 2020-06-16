@@ -32,6 +32,8 @@ class App extends Component {
       'pages/orderPay/index',
       'pages/Address/addressList',
       'pages/Address/editAddress',
+      'pages/About/about',
+      'pages/Order/order'
 
     ],
     window: {

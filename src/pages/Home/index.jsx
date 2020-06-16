@@ -2,7 +2,7 @@ import Taro, { Component } from "@tarojs/taro";
 import { View, Text } from "@tarojs/components";
 import { AtAvatar, AtSearchBar, AtFab } from "taro-ui";
 import { connect } from "@tarojs/redux";
-import { addCommodity, reduceCommodity } from "../../actions/home";
+import { addCommodity, reduceCommodity, saveUserInfo } from "../../actions/home";
 import "./index.less";
 
 const dataList = [
@@ -43,6 +43,9 @@ const dataList = [
     reduceCommodity(payload) {
       dispatch(reduceCommodity(payload));
     },
+    saveUserInfo(payload){
+      dispatch(saveUserInfo(payload));
+    }
   })
 )
 class Home extends Component {
@@ -55,7 +58,24 @@ class Home extends Component {
 
   componentWillMount() {}
 
-  componentDidMount() {}
+  componentDidMount() {
+    console.log(this.props, 'PPPPP')
+    let _this = this
+    Taro.getUserInfo({
+      success: function(res) {
+        console.log(res, '______')
+        console.log(_this.props, '|||||')
+        _this.props.saveUserInfo(res.userInfo)
+        // var userInfo = res.userInfo
+        // var nickName = userInfo.nickName
+        // var avatarUrl = userInfo.avatarUrl
+        // var gender = userInfo.gender //性别 0：未知、1：男、2：女
+        // var province = userInfo.province
+        // var city = userInfo.city
+        // var country = userInfo.country
+      }
+    })
+  }
 
   componentWillUnmount() {}
 

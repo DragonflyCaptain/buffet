@@ -3,3 +3,5 @@ export const REDUCE_COMMODITY = 'REDUCE_COMMODITY';
 
 export const ADD_SELECT = 'ADD_SELECT';
 export const REDUCE_SELECT = 'REDUCE_SELECT';
+
+export const SAVE_USER_INFO = 'SAVE_USER_INFO';
