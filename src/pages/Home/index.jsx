@@ -88,23 +88,21 @@ class Home extends Component {
   };
 
   handleTypeClick(item) {
-    // console.log(Taro.scanCode)
-    // Taro.scanCode().then(res=>{
-    //     console.log(res)
-    // })
     this.setState({
       typeContent: item,
     });
   }
 
   renderScrollList = (data, scrollItem) => {
+    const { typeContent } = this.state
     if (data.length) {
       return data.map((item) => {
         return (
           <View
             onClick={() => this.handleTypeClick(item)}
             style={scrollItem}
-            key={Math.random()}
+            key={item}
+            className={typeContent === item ? 'active': ''}
           >
             {item}
           </View>
@@ -194,6 +192,7 @@ class Home extends Component {
       height: "30px",
       "font-size": "12px",
       padding: "3px",
+      'line-height': '30px'
     };
     const img = {
       width: "100%",

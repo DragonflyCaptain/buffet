@@ -53,13 +53,16 @@ class UserPage extends Component {
         </View>
         <View className="order-warp" onClick={this.goToOrder}>
           <Image src={orderImg} className="order-img" />
-          <Text>我的订单</Text>
+          <Text className="text">我的订单</Text>
           <View className="arrow-right"></View>
         </View>
         <View className="order-warp" onClick={this.goToAbout}>
           <Image src={aboutImg} className="order-img" />
-          <Text>关于我们</Text>
+          <Text className="text">关于我们</Text>
           <View className="arrow-right"></View>
+        </View>
+        <View className="zw">
+
         </View>
       </View>
     );

@@ -1,14 +1,15 @@
 .user-warp{
     width: 100%;
     height: 100%;
-    // background: #cacaca;
+    background: #f7f7f7;
+    padding-top: .3125rem;
     .info-warp{
         width: 96%;
         height: 6rem;
-        margin: .9375rem 2%; // 15
+        margin: 0 2%; // 15
         border-radius: .375rem;
-        box-shadow: .0825rem .0625rem .0625rem #757575;
-        background: pink;
+        box-shadow: .0825rem .0625rem .0625rem #f7f7f7;
+        background: white;
         .user-avatar{
             position: relative;
             top: 50%;
@@ -26,20 +27,27 @@
         border-radius: .675rem;
         margin: .9375rem 2%; // 15
         line-height: 3rem;
-        box-shadow: .0825rem .0625rem .0625rem #757575;
+        box-shadow: .0825rem .0625rem .0625rem #f7f7f7;
         position: relative;
 
         .order-img{
-            width: 1.5625rem;
-            height: 1.5625rem;
-            margin-top: .825rem;
+            position: absolute;
+            top: 50%;
+            transform: translate(0,-50%);
+            width: 1.1625rem;
+            height: 1.1625rem;
+            margin-left: 22.077rpx;
+            
+        }
+        .text{
+            margin-left: 2.25rem;
         }
 
         .arrow-right:after {
             content: "";
             position: absolute;
-            top: .899rem;
-            right: 1.025rem;
+            top: .019rem;
+            right: .125rem;
             margin: 1.25rem;
             border-right: .125rem solid #757575;
             border-bottom: .125rem solid #757575;
@@ -51,5 +59,9 @@
             -moz-transform: rotate(-45deg);
             -ms-transform: rotate(-45deg);
         }
+    }
+    .zw{
+        width: 100%;
+        height: 573rpx;
     }
 }

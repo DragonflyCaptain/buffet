@@ -67,7 +67,6 @@ class Cart extends Component {
       data &&
       data.length &&
       data.map((item, index) => {
-        console.log(item, item.price, "))))______");
         if (item.selected === 0) return false;
         return (
           <View className="cartItem" key={item.id}>
