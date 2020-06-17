@@ -4,6 +4,7 @@ import {
   ADD_SELECT,
   REDUCE_SELECT,
   SAVE_USER_INFO,
+  RESET_CART,
 } from "../constants/home";
 
 function random(lower, upper) {
@@ -176,6 +177,84 @@ export default function addToCart(state = INITIAL_STATE, action) {
         ...state,
         userInfo: action.payload,
       };
+    case RESET_CART:
+      return {
+        ...state,
+        cartSum: [],
+        commodityList: {
+          热搜推荐: [
+            {
+              url: "https://source.unsplash.com/random",
+              name: "花露水",
+              count: 100,
+              id: Math.random(),
+              price: 30,
+              selected: 0,
+            },
+            {
+              url: "https://source.unsplash.com/random",
+              name: "驱蚊片",
+              count: 200,
+              id: Math.random(),
+              price: 30,
+              selected: 0,
+            },
+          ],
+          个护清洁: [
+            {
+              url: "https://source.unsplash.com/random",
+              name: "飘柔洗发露",
+              count: 150,
+              id: Math.random(),
+              price: 30,
+              selected: 0,
+            },
+            {
+              url: "https://source.unsplash.com/random",
+              name: "舒肤佳沐浴露",
+              count: 150,
+              id: Math.random(),
+              price: 30,
+              selected: 0,
+            },
+            {
+              url: "https://source.unsplash.com/random",
+              name: "舒肤佳香皂",
+              count: 150,
+              id: Math.random(),
+              price: 30,
+              selected: 0,
+            },
+          ],
+          食品酒水: [
+            {
+              url: "https://source.unsplash.com/random",
+              name: "老坛酸菜牛肉面",
+              count: 150,
+              id: Math.random(),
+              price: 30,
+              selected: 0,
+            },
+            {
+              url: "https://source.unsplash.com/random",
+              name: "红烧牛肉面",
+              count: 150,
+              id: Math.random(),
+              price: 30,
+              selected: 0,
+            },
+            {
+              url: "https://source.unsplash.com/random",
+              name: "汤达人泡面",
+              count: 150,
+              id: Math.random(),
+              price: 30,
+              selected: 0,
+            },
+          ],
+        },
+        
+      }
     default:
       return state;
   }

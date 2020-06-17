@@ -52,7 +52,7 @@ class App extends Component {
           pagePath: "pages/Home/index",
           iconPath: "./assets/tab-bar/home.png",
           selectedIconPath: "./assets/tab-bar/homed.png",
-          text: "小卖部",
+          text: "首页",
         },{
           pagePath: "pages/Cart/index",
           iconPath: "./assets/tab-bar/cart.png",

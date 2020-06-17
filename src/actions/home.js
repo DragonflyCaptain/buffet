@@ -1,4 +1,11 @@
-import { ADD_COMMODITY, REDUCE_COMMODITY, ADD_SELECT, REDUCE_SELECT, SAVE_USER_INFO } from "../constants/home";
+import {
+  ADD_COMMODITY,
+  REDUCE_COMMODITY,
+  ADD_SELECT,
+  REDUCE_SELECT,
+  SAVE_USER_INFO,
+  RESET_CART
+} from "../constants/home";
 
 export const addCommodity = payload => {
   return {
@@ -32,6 +39,13 @@ export const reduceSelect = payload => {
 export const saveUserInfo = payload => {
   return {
     type: SAVE_USER_INFO,
+    payload
+  }
+}
+
+export const resetCart = payload => {
+  return {
+    type: RESET_CART,
     payload
   }
 }

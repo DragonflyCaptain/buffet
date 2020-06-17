@@ -53,6 +53,7 @@ class Home extends Component {
     super(...arguments);
     this.state = {
       typeContent: "热搜推荐",
+      searchVal: ''
     };
   }
 
@@ -84,13 +85,19 @@ class Home extends Component {
   componentDidHide() {}
 
   config = {
-    navigationBarTitleText: "小卖部",
+    navigationBarTitleText: "首页",
   };
 
   handleTypeClick(item) {
     this.setState({
       typeContent: item,
     });
+  }
+
+  onChange = (value) => {
+    this.setState({
+      searchVal: value
+    })
   }
 
   renderScrollList = (data, scrollItem) => {
@@ -186,7 +193,7 @@ class Home extends Component {
   };
 
   render() {
-    const { typeContent } = this.state;
+    const { typeContent, searchVal } = this.state;
     console.log(this.props, "render");
     const scrollItem = {
       height: "30px",
@@ -206,8 +213,8 @@ class Home extends Component {
         <View className="search-warp">
           {/* <Input type="text" className="search" placeholder="搜索商品" /> */}
           <AtSearchBar
-            // value={this.state.value}
-            // onChange={this.onChange.bind(this)}
+            value={searchVal}
+            onChange={this.onChange}
           />
         </View>
         <View className="content-warp">

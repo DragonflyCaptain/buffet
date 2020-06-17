@@ -1,20 +1,17 @@
-import Taro, { Component, scanCode } from "@tarojs/taro";
-import { View, Camera, Text } from "@tarojs/components";
+import Taro, { Component } from "@tarojs/taro";
+import { View } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
-import { AtNoticebar, AtList, AtListItem } from "taro-ui";
 import "./index.less";
+import { resetCart } from "../../actions/home";
 
 @connect(
   ({ addToCart }) => ({
     addToCart,
   }),
   (dispatch) => ({
-    add(num) {
-      dispatch(addSelect(num));
-    },
-    dec(num) {
-      dispatch(reduceSelect(num));
-    },
+    resetCart(payload) {
+      dispatch(resetCart(payload))
+    }
   })
 )
 class OrderPay extends Component {
@@ -65,6 +62,23 @@ class OrderPay extends Component {
     );
   };
 
+  payment = () => {
+    // Taro.atMessage({
+    //   message: 'hhhhh',
+    //   type: 'success'
+    // })
+    Taro.showLoading({
+      title: 'loading',
+      mask: true
+    })
+    setTimeout(()=>{
+      Taro.hideLoading()
+      this.props.resetCart()
+      Taro.navigateBack({ delta: 2 })
+    }, 2000)
+
+  }
+
   render() {
       console.log(this.props, '确认订单')
       const {addToCart:{cartSum}} = this.props
@@ -77,6 +91,10 @@ class OrderPay extends Component {
       };
     return (
       <View>
+
+        {/* <AtMessage /> */}
+
+
         {/* <AtNoticebar close>疫情期间，请注意防护!</AtNoticebar> */}
         {/* <View className="address-warp" onClick={this.goToAddressList}>
           <Text>朱钰</Text>
@@ -86,7 +104,7 @@ class OrderPay extends Component {
         <View className="list">
         {this.renderSelectedCart(cartSum, img)}
         </View>
-        <View className="pay-warp">
+        <View className="pay-warp" onClick={ this.payment }>
           <View className="pay-btn">微信支付</View>
         </View>
       </View>

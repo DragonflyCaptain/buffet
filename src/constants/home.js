@@ -1,5 +1,6 @@
 export const ADD_COMMODITY = 'ADD_COMMODITY';
 export const REDUCE_COMMODITY = 'REDUCE_COMMODITY';
+export const RESET_CART = 'RESET_CART'
 
 export const ADD_SELECT = 'ADD_SELECT';
 export const REDUCE_SELECT = 'REDUCE_SELECT';
