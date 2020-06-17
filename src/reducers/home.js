@@ -6,6 +6,10 @@ import {
   SAVE_USER_INFO,
 } from "../constants/home";
 
+function random(lower, upper) {
+	return Math.floor(Math.random() * (upper - lower)) + lower;
+}
+
 const INITIAL_STATE = {
   cartSum: [],
   commodityList: {

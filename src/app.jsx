@@ -60,8 +60,8 @@ class App extends Component {
           text: "购物车"
         },{
           pagePath: "pages/User/index",
-          iconPath: "./assets/tab-bar/home.png",
-          selectedIconPath: "./assets/tab-bar/homed.png",
+          iconPath: "./assets/tab-bar/user.png",
+          selectedIconPath: "./assets/tab-bar/userd.png",
           text: "我的",
         }
       ],
