@@ -6,6 +6,7 @@ import "./user.less";
 
 const orderImg = require("../../assets/static/order.png");
 const aboutImg = require("../../assets/static/About.png");
+const scanning = require("../../assets/static/scaning.png");
 @connect(
   ({ addToCart }) => ({ addToCart }),
   (dispatch) => ({})
@@ -42,6 +43,14 @@ class UserPage extends Component {
     });
   }
 
+  handleScanCode = () => {
+    Taro.scanCode({
+      success: (res)=>{
+        console.log(res, 'PPPPPPP')
+      }
+    })
+  }
+
   render() {
     const { addToCart:{ userInfo }  } = this.props;
     const { avatarUrl, nickName } = userInfo;
@@ -61,8 +70,10 @@ class UserPage extends Component {
           <Text className="text">关于我们</Text>
           <View className="arrow-right"></View>
         </View>
-        <View className="zw">
-
+        <View className="order-warp" onClick={this.handleScanCode}>
+          <Image src={scanning} className="order-img" />
+          <Text className="text">扫描</Text>
+          <View className="arrow-right"></View>
         </View>
       </View>
     );
