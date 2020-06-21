@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
 import count from './count';
-import addToCart from './home';
+import Home from './home';
 import cart from './cart';
 
 export default combineReducers({
   count,
-  addToCart,
+  Home,
   cart
 })

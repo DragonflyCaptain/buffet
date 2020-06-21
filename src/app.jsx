@@ -33,8 +33,9 @@ class App extends Component {
       'pages/Address/addressList',
       'pages/Address/editAddress',
       'pages/About/about',
-      'pages/Order/order'
-
+      'pages/Order/order',
+      'pages/Chat/chat',
+      'pages/Entry/index',
     ],
     window: {
       backgroundTextStyle: "light",

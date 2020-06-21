@@ -7,9 +7,9 @@ import { addSelect, reduceSelect } from "../../actions/home";
 import "./index.less";
 
 @connect(
-  ({ count, addToCart }) => ({
+  ({ count, Home }) => ({
     count,
-    addToCart,
+    Home,
   }),
   (dispatch) => ({
     add(num) {
@@ -43,23 +43,23 @@ class Cart extends Component {
   };
 
   cartAdd = (item, index) => {
+    console.log("购物车增加", this.props);
     let obj = {
-      name: item.name,
+      name: item.title,
       index,
       item,
     };
     this.props.add(obj);
-    console.log("购物车增加", this.props);
   };
 
   cartReduce = (item, index) => {
+    console.log("购物车减少");
     let obj = {
-      name: item.name,
+      name: item.title,
       index,
       item,
     };
     this.props.dec(obj);
-    console.log("购物车减少");
   };
 
   renderSelectedCart = (data, img) => {
@@ -74,7 +74,7 @@ class Cart extends Component {
               <View style={img}></View>
             </View>
             <View className="cartContent">
-              <View>名称：{item.name}</View>
+              <View>名称：{item.title}</View>
               <View>¥：{`${item.price * item.selected || item.price}`}</View>
               <View className="addPic">
                 <View
@@ -100,8 +100,13 @@ class Cart extends Component {
 
   goToPayPage = () => {
     // console.log('去结算了')
+    const { Home: { cartSum } } = this.props;
+    let sum = 0;
+    cartSum.forEach(item=>{
+      sum += (item.price * item.selected)
+    })
     Taro.navigateTo({
-      url: `../orderPay/index`,
+      url: `../orderPay/index?sum=${sum}`,
     });
   }
 
@@ -110,7 +115,7 @@ class Cart extends Component {
       count: { num },
       add,
       dec,
-      addToCart: { cartSum },
+      Home: { cartSum },
     } = this.props;
     const img = {
       width: "100%",

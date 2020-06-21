@@ -4,7 +4,7 @@
 	"description": "xiaomaibu",
 	"appid": "wx20a1d7176449f468",
 	"setting": {
-		"urlCheck": true,
+		"urlCheck": false,
 		"es6": false,
 		"postcss": false,
 		"preloadBackgroundData": false,

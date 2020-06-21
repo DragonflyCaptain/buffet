@@ -1,14 +1,15 @@
 import Taro, { Component, scanCode } from "@tarojs/taro";
-import { View, Camera, Text, Image } from "@tarojs/components";
+import { View, Text, Image, Button } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
-import { AtList, AtListItem, AtAvatar } from "taro-ui";
+import { AtAvatar } from "taro-ui";
+import { getAllCommodityData_server } from '../../servers/servers'
 import "./user.less";
 
 const orderImg = require("../../assets/static/order.png");
 const aboutImg = require("../../assets/static/About.png");
 const scanning = require("../../assets/static/scaning.png");
 @connect(
-  ({ addToCart }) => ({ addToCart }),
+  ({ Home }) => ({ Home }),
   (dispatch) => ({})
 )
 class UserPage extends Component {
@@ -43,16 +44,14 @@ class UserPage extends Component {
     });
   }
 
-  handleScanCode = () => {
-    Taro.scanCode({
-      success: (res)=>{
-        console.log(res, 'PPPPPPP')
-      }
+  handleScanCode = async () => {
+    Taro.navigateTo({
+      url: '../Entry/index'
     })
   }
 
   render() {
-    const { addToCart:{ userInfo }  } = this.props;
+    const { Home:{ userInfo }  } = this.props;
     const { avatarUrl, nickName } = userInfo;
     return (
       <View className="user-warp">
@@ -72,9 +71,10 @@ class UserPage extends Component {
         </View>
         <View className="order-warp" onClick={this.handleScanCode}>
           <Image src={scanning} className="order-img" />
-          <Text className="text">扫描</Text>
+          <Text className="text">录入</Text>
           <View className="arrow-right"></View>
         </View>
+        <Button open-type='getUserInfo'  bindgetuserinfo='userinfo'>点击获取</Button>
       </View>
     );
   }

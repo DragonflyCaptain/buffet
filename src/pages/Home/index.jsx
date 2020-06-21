@@ -2,40 +2,18 @@ import Taro, { Component } from "@tarojs/taro";
 import { View, Text } from "@tarojs/components";
 import { AtAvatar, AtSearchBar, AtFab } from "taro-ui";
 import { connect } from "@tarojs/redux";
-import { addCommodity, reduceCommodity, saveUserInfo } from "../../actions/home";
+import {
+  addCommodity,
+  reduceCommodity,
+  saveUserInfo,
+  saveTypeData
+} from "../../actions/home";
+import { dataList } from '../../common/config'
+import * as api from "../../servers/servers";
 import "./index.less";
 
-const dataList = [
-  "热搜推荐",
-  "食品酒水",
-  "个护清洁",
-  //   '生鲜果蔬',
-  //   '美妆护肤',
-  //   '精品男装',
-  //   '精品女装',
-  //   '内衣配饰',
-  //   '鞋靴箱包',
-  //   '手机数码',
-  //   '家用电器',
-  //   '电脑办公',
-  //   '运动户外',
-  //   '汽车生活',
-  //   '母婴童装',
-  //   '玩具乐器',
-  //   '家具厨具',
-  //   '计生情趣',
-  //   '医药保健',
-  //   '图书音像',
-  //   '钟表珠宝',
-  //   '奢侈品',
-  //   '京东国际',
-  //   '家具建材',
-  //   '宠物园艺',
-  //   '礼品鲜花'
-];
-
 @connect(
-  ({ addToCart }) => ({ addToCart }),
+  ({ Home }) => ({ Home }),
   (dispatch) => ({
     addCommodity(payload) {
       dispatch(addCommodity(payload));
@@ -43,8 +21,11 @@ const dataList = [
     reduceCommodity(payload) {
       dispatch(reduceCommodity(payload));
     },
-    saveUserInfo(payload){
+    saveUserInfo(payload) {
       dispatch(saveUserInfo(payload));
+    },
+    saveTypeData(payload) {
+      dispatch( saveTypeData(payload) )
     }
   })
 )
@@ -53,29 +34,42 @@ class Home extends Component {
     super(...arguments);
     this.state = {
       typeContent: "热搜推荐",
-      searchVal: ''
+      searchVal: "",
     };
   }
 
-  componentWillMount() {}
-
-  componentDidMount() {
-    console.log(this.props, 'PPPPP')
-    let _this = this
+  componentWillMount() {
+    let _this = this;
     Taro.getUserInfo({
       success: function(res) {
-        console.log(res, '______')
-        console.log(_this.props, '|||||')
-        _this.props.saveUserInfo(res.userInfo)
-        // var userInfo = res.userInfo
-        // var nickName = userInfo.nickName
-        // var avatarUrl = userInfo.avatarUrl
-        // var gender = userInfo.gender //性别 0：未知、1：男、2：女
-        // var province = userInfo.province
-        // var city = userInfo.city
-        // var country = userInfo.country
-      }
+        console.log(res, '用户信息')
+        _this.props.saveUserInfo(res.userInfo);
+      },
+    });
+  }
+
+  requestHomeData = async (params, text=this.state.typeContent) =>{
+    Taro.showLoading({
+      title: "loading",
+      mask: true,
     })
+    const {code, data} = await api.clickTypeRequest(params)
+    if(code === 0){
+      data.forEach(item=>{
+        item['selected'] = 0
+      })
+      const obj = {
+        text,
+        data: data
+      }
+      this.props.saveTypeData(obj)
+      Taro.hideLoading();
+    }
+  }
+
+  componentDidMount() {
+    const { typeContent } = this.state
+    this.requestHomeData( { category: typeContent } )
   }
 
   componentWillUnmount() {}
@@ -89,19 +83,23 @@ class Home extends Component {
   };
 
   handleTypeClick(item) {
+    let params = {
+      category: item
+    }
     this.setState({
       typeContent: item,
     });
+    this.requestHomeData(params, item)
   }
 
   onChange = (value) => {
     this.setState({
-      searchVal: value
-    })
-  }
+      searchVal: value,
+    });
+  };
 
   renderScrollList = (data, scrollItem) => {
-    const { typeContent } = this.state
+    const { typeContent } = this.state;
     if (data.length) {
       return data.map((item) => {
         return (
@@ -109,7 +107,7 @@ class Home extends Component {
             onClick={() => this.handleTypeClick(item)}
             style={scrollItem}
             key={item}
-            className={typeContent === item ? 'active': ''}
+            className={typeContent === item ? "active" : ""}
           >
             {item}
           </View>
@@ -124,9 +122,9 @@ class Home extends Component {
   }
 
   addItem(item, index, type) {
-    console.log(item.name, type, "添加一个商品");
+    console.log('首页增加商品数量')
     let obj = {
-      name: item.name,
+      name: item.title,
       type,
       index,
       item,
@@ -134,9 +132,9 @@ class Home extends Component {
     this.props.addCommodity(obj);
   }
   reduceItem(item, index, type) {
-    console.log(item.name, type, "去掉一个商品");
+    console.log('首页减少商品数量')
     let obj = {
-      name: item.name,
+      name: item.title,
       type,
       index,
       item,
@@ -145,7 +143,6 @@ class Home extends Component {
   }
 
   goToDetail = (obj) => {
-    console.log(obj);
     let newObj = JSON.stringify(obj);
     Taro.navigateTo({
       url: `../commodityDetail/index?params=${newObj}`,
@@ -154,9 +151,9 @@ class Home extends Component {
 
   renderTypeDetail = (str, img) => {
     const { typeContent } = this.state;
-    const { addToCart } = this.props;
-    const { commodityList } = addToCart;
-    let data = commodityList[typeContent] || commodityList[str];
+    const { Home } = this.props;
+    const { commodityList } = Home;
+    let data = commodityList[typeContent] || [];
     if (data.length) {
       return data.map((item, index) => {
         return (
@@ -166,7 +163,7 @@ class Home extends Component {
             </View>
             <View className="every-title">
               <View className="title">
-                <View> 名称： {item.name}</View>
+                <View> 名称： {item.title}</View>
                 <View> 价格： {item.price}</View>
                 <View className="addPic">
                   <View
@@ -194,12 +191,11 @@ class Home extends Component {
 
   render() {
     const { typeContent, searchVal } = this.state;
-    console.log(this.props, "render");
     const scrollItem = {
       height: "30px",
       "font-size": "12px",
       padding: "3px",
-      'line-height': '30px'
+      "line-height": "30px",
     };
     const img = {
       width: "100%",
@@ -211,11 +207,7 @@ class Home extends Component {
     return (
       <View className="home-warp">
         <View className="search-warp">
-          {/* <Input type="text" className="search" placeholder="搜索商品" /> */}
-          <AtSearchBar
-            value={searchVal}
-            onChange={this.onChange}
-          />
+          <AtSearchBar value={searchVal} onChange={this.onChange} />
         </View>
         <View className="content-warp">
           <View className="type">

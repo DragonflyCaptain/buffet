@@ -4,7 +4,8 @@ import {
   ADD_SELECT,
   REDUCE_SELECT,
   SAVE_USER_INFO,
-  RESET_CART
+  RESET_CART,
+  SAVE_TYPE_DATA
 } from "../constants/home";
 
 export const addCommodity = payload => {
@@ -46,6 +47,13 @@ export const saveUserInfo = payload => {
 export const resetCart = payload => {
   return {
     type: RESET_CART,
+    payload
+  }
+}
+
+export const saveTypeData = payload => {
+  return {
+    type: SAVE_TYPE_DATA,
     payload
   }
 }
