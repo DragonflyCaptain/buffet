@@ -1,5 +1,5 @@
 import Taro, { Component } from "@tarojs/taro";
-import { View, Text } from "@tarojs/components";
+import { View, Text, Image } from "@tarojs/components";
 import { AtAvatar, AtSearchBar, AtFab } from "taro-ui";
 import { connect } from "@tarojs/redux";
 import {
@@ -11,6 +11,8 @@ import {
 import { dataList } from '../../common/config'
 import * as api from "../../servers/servers";
 import "./index.less";
+
+const CartImg = require('../../assets/tab-bar/cart.png') 
 
 @connect(
   ({ Home }) => ({ Home }),
@@ -35,18 +37,11 @@ class Home extends Component {
     this.state = {
       typeContent: "热搜推荐",
       searchVal: "",
+      selected: [],
     };
   }
 
-  componentWillMount() {
-    let _this = this;
-    Taro.getUserInfo({
-      success: function(res) {
-        console.log(res, '用户信息')
-        _this.props.saveUserInfo(res.userInfo);
-      },
-    });
-  }
+  componentWillMount() { }
 
   requestHomeData = async (params, text=this.state.typeContent) =>{
     Taro.showLoading({
@@ -69,6 +64,7 @@ class Home extends Component {
 
   componentDidMount() {
     const { typeContent } = this.state
+    console.log('切换tab执行一次')
     this.requestHomeData( { category: typeContent } )
   }
 
@@ -83,13 +79,20 @@ class Home extends Component {
   };
 
   handleTypeClick(item) {
-    let params = {
-      category: item
+    let arr = this.state.selected;
+    if(!arr.includes(item)){
+      arr.push(item)
+      let params = {
+        category: item
+      }
+      this.setState({
+        selected: arr
+      });
+      this.requestHomeData(params, item)
     }
     this.setState({
-      typeContent: item,
-    });
-    this.requestHomeData(params, item)
+      typeContent: item
+    })
   }
 
   onChange = (value) => {
@@ -114,7 +117,7 @@ class Home extends Component {
         );
       });
     }
-    return <View style={scrollItem}>null</View>;
+    // return <View style={scrollItem}></View>;
   };
 
   handlImgClick(item) {
@@ -123,23 +126,21 @@ class Home extends Component {
 
   addItem(item, index, type) {
     console.log('首页增加商品数量')
-    let obj = {
+    this.props.addCommodity({
       name: item.title,
       type,
       index,
       item,
-    };
-    this.props.addCommodity(obj);
+    });
   }
   reduceItem(item, index, type) {
     console.log('首页减少商品数量')
-    let obj = {
+    this.props.reduceCommodity({
       name: item.title,
       type,
       index,
       item,
-    };
-    this.props.reduceCommodity(obj);
+    });
   }
 
   goToDetail = (obj) => {
@@ -186,11 +187,17 @@ class Home extends Component {
         );
       });
     }
-    return <Text>null</Text>;
+    // return <Text>null</Text>;
   };
 
+  goToCart = () => {
+    Taro.switchTab({
+      url: '../Cart/index'
+    })
+  }
+
   render() {
-    const { typeContent, searchVal } = this.state;
+    const { typeContent, searchVal, selected } = this.state;
     const scrollItem = {
       height: "30px",
       "font-size": "12px",
@@ -201,7 +208,7 @@ class Home extends Component {
       width: "100%",
       height: "100%",
       "background-image": "url(https://source.unsplash.com/random)",
-      "background-size": "100%",
+      "background-size": "100% 100%",
       "background-repeat": "no-repeat",
     };
     return (
@@ -216,6 +223,9 @@ class Home extends Component {
           <View className="type-detail">
             {this.renderTypeDetail("热搜推荐", img)}
           </View>
+        </View>
+        <View className="view-cart" onClick={this.goToCart}>
+          <Image src={CartImg} className="go-cart" />
         </View>
       </View>
     );

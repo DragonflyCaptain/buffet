@@ -61,7 +61,7 @@ class OrderPay extends Component {
               <View style={img}></View>
             </View>
             <View className="cartContent">
-              <View>名称：{item.name}</View>
+              <View>名称：{item.title}</View>
               <View>¥：{`${item.price * item.selected || item.price}`}</View>
               <View>数量：{item.selected}</View>
             </View>
@@ -108,7 +108,6 @@ class OrderPay extends Component {
       cartSum.forEach((item) => {
         sum += item.price * item.selected;
       });
-    debugger;
     console.log(sum, "最后的总价");
     return 0;
   };
@@ -122,7 +121,7 @@ class OrderPay extends Component {
       width: "100%",
       height: "100%",
       "background-image": "url(https://source.unsplash.com/random)",
-      "background-size": "100%",
+      "background-size": "100% 100%",
       "background-repeat": "no-repeat",
     };
     return (
@@ -136,12 +135,14 @@ class OrderPay extends Component {
           <View>湖北仙桃市通海口镇马套村十一组4号</View>
         </View> */}
         <View className="list">{this.renderSelectedCart(cartSum, img)}</View>
-        <View className="pay-warp" onClick={this.payment}>
+        <View className="pay-warp">
           <View className="price-sum">
-            <View>{`总计: ¥${sum}`}</View>
+            {/* <View>{`合计: ¥${sum}`}</View> */}
+            <Text>合计：</Text>
+            <Text className="price">{`¥${sum}`}</Text>
             {/* <View></View> */}
           </View>
-          <View className="pay-btn">微信支付</View>
+          <View className="pay-btn" onClick={this.payment}>微信支付</View>
         </View>
         <AtModal
           isOpened={isShow}

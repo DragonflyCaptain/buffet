@@ -1,8 +1,8 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Text } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
-import { AtButton, AtCard } from "taro-ui";
-import { addSelect, reduceSelect } from "../../actions/home";
+import { AtButton, AtCard, AtSwipeAction, AtList } from "taro-ui";
+import { addSelect, reduceSelect, saveUserInfo } from "../../actions/home";
 
 import "./index.less";
 
@@ -12,11 +12,14 @@ import "./index.less";
     Home,
   }),
   (dispatch) => ({
-    add(num) {
-      dispatch(addSelect(num));
+    add(payload) {
+      dispatch(addSelect(payload));
     },
-    dec(num) {
-      dispatch(reduceSelect(num));
+    dec(payload) {
+      dispatch(reduceSelect(payload));
+    },
+    saveUserInfo(payload) {
+      dispatch(saveUserInfo(payload));
     },
   })
 )
@@ -100,15 +103,26 @@ class Cart extends Component {
 
   goToPayPage = () => {
     // console.log('去结算了')
-    const { Home: { cartSum } } = this.props;
-    let sum = 0;
-    cartSum.forEach(item=>{
-      sum += (item.price * item.selected)
-    })
-    Taro.navigateTo({
-      url: `../orderPay/index?sum=${sum}`,
+    const {
+      Home: { cartSum },
+    } = this.props;
+    Taro.getSetting().then((res) => {
+      if (res.authSetting["scope.userInfo"]) {
+        let sum = 0;
+        cartSum.forEach((item) => {
+          sum += item.price * item.selected;
+        });
+        Taro.navigateTo({
+          url: `../orderPay/index?sum=${sum}`,
+        });
+      } else {
+        this.props.saveUserInfo({})
+        Taro.switchTab({
+          url: "../User/index",
+        });
+      }
     });
-  }
+  };
 
   render() {
     const {
@@ -121,7 +135,7 @@ class Cart extends Component {
       width: "100%",
       height: "100%",
       "background-image": "url(https://source.unsplash.com/random)",
-      "background-size": "100%",
+      "background-size": "100% 100%",
       "background-repeat": "no-repeat",
     };
     return (
@@ -136,9 +150,12 @@ class Cart extends Component {
         </AtCard>
         {cartSum.length ? (
           <View className="goToPay">
-            <View className="goToPayBtn" onClick={this.goToPayPage}>去结算({cartSum.length})</View>
+            <View className="goToPayBtn" onClick={this.goToPayPage}>
+              去结算({cartSum.length})
+            </View>
           </View>
         ) : null}
+        <View className="place"></View>
       </View>
     );
   }
