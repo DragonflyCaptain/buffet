@@ -91,7 +91,9 @@ class OrderPay extends Component {
     setTimeout(() => {
       Taro.hideLoading();
       this.props.resetCart();
-      Taro.navigateBack({ delta: 2 });
+      Taro.switchTab({
+        url: "../Home/index",
+      });
       this.setState({
         isShow: false,
       });

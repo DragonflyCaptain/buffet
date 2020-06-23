@@ -64,15 +64,14 @@ class Home extends Component {
 
   componentDidMount() {
     const { typeContent } = this.state
-    console.log('切换tab执行一次')
     this.requestHomeData( { category: typeContent } )
   }
 
   componentWillUnmount() {}
 
-  componentDidShow() {}
+  componentDidShow() { console.log('componentDidShow')}
 
-  componentDidHide() {}
+  componentDidHide() {console.log('componentDidHide')}
 
   config = {
     navigationBarTitleText: "首页",
