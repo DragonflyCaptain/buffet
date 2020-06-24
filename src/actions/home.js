@@ -5,7 +5,9 @@ import {
   REDUCE_SELECT,
   SAVE_USER_INFO,
   RESET_CART,
-  SAVE_TYPE_DATA
+  SAVE_TYPE_DATA,
+  CACHE_TYPE,
+  RESET_SELECTED
 } from "../constants/home";
 
 export const addCommodity = payload => {
@@ -54,6 +56,20 @@ export const resetCart = payload => {
 export const saveTypeData = payload => {
   return {
     type: SAVE_TYPE_DATA,
+    payload
+  }
+}
+
+export const cacheType =  payload => {
+  return {
+    type: CACHE_TYPE,
+    payload
+  }
+}
+
+export const resetSelected = payload => {
+  return {
+    type: RESET_SELECTED,
     payload
   }
 }

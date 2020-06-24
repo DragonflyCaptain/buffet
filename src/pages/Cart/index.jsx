@@ -74,7 +74,7 @@ class Cart extends Component {
         return (
           <View className="cartItem" key={item.id}>
             <View className="cartImgWarp">
-              <View style={img}></View>
+              <Image src={item.url} style={img} />
             </View>
             <View className="cartContent">
               <View>名称：{item.title}</View>
@@ -126,15 +126,11 @@ class Cart extends Component {
 
   render() {
     const {
-      count: { num },
-      add,
-      dec,
       Home: { cartSum },
     } = this.props;
     const img = {
       width: "100%",
       height: "100%",
-      "background-image": "url(https://source.unsplash.com/random)",
       "background-size": "100% 100%",
       "background-repeat": "no-repeat",
     };

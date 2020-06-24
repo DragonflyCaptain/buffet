@@ -5,7 +5,9 @@ import {
   REDUCE_SELECT,
   SAVE_USER_INFO,
   RESET_CART,
-  SAVE_TYPE_DATA
+  SAVE_TYPE_DATA,
+  CACHE_TYPE,
+  RESET_SELECTED
 } from "../constants/home";
 
 function random(lower, upper) {
@@ -89,6 +91,15 @@ const saveTypeData = (commodityList, obj) =>{
   return newObj
 }
 
+const handleResetCount = (obj) => {
+  Object.keys(obj).forEach(item=>{
+    obj[item].forEach(val=>{
+      val.selected = 0
+    })
+  })
+  return obj
+}
+
 export default function Home(state = INITIAL_STATE, action) {
   switch (action.type) {
     case ADD_COMMODITY:
@@ -127,7 +138,12 @@ export default function Home(state = INITIAL_STATE, action) {
       return {
         ...state,
         commodityList: saveTypeData(state.commodityList, action.payload)
-      }
+      };
+    case RESET_SELECTED: 
+        return {
+          ...state,
+          commodityList: handleResetCount(state.commodityList)
+        }
     default:
       return state;
   }

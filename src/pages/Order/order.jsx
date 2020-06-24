@@ -1,23 +1,22 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Button } from "@tarojs/components";
-import {
-  AtTabs,
-  AtTabsPane,
-  AtModal,
-  AtModalHeader,
-  AtModalContent,
-  AtModalAction,
-} from "taro-ui";
+import { AtTabs, AtTabsPane, AtModal } from "taro-ui";
+import { connect } from "@tarojs/redux";
 import "./index.less";
 
 const NULLIMG = require("../../assets/static/null.jpg");
-
-export default class Order extends Component {
+@connect(
+  ({ Order }) => ({
+    Order,
+  })
+  // (dispatch) => ({})
+)
+class Order extends Component {
   constructor() {
     super(...arguments);
     this.state = {
       current: 0,
-      isShow: false
+      isShow: false,
     };
   }
 
@@ -45,49 +44,55 @@ export default class Order extends Component {
   handleDelete = () => {
     console.log("我要删除这个订单");
     this.setState({
-      isShow: true
-    })
+      isShow: true,
+    });
   };
 
   handleCancel = () => {
     this.setState({
-      isShow: false
-    })
-  }
+      isShow: false,
+    });
+  };
 
   handleConfirm = () => {
     this.setState({
-      isShow: false
-    })
-  }
+      isShow: false,
+    });
+  };
 
   goToEvaluation = () => {
     console.log("我要去评价页面");
   };
 
-  renderAll = () => {
+  renderAll = (data) => {
     return (
-      <View className="com-all-warp">
-        <View className="com-detail">
-          <View className="com-title">
-            <View className="fo-l mg-l">店名</View>
-            <View className="fo-r mg-r">状态</View>
+      data &&
+      data.length &&
+      data.map((item, index) => {
+        return (
+          <View className="com-all-warp" key={index}>
+            <View className="com-detail">
+              <View className="com-title">
+                <View className="fo-l mg-l">店名</View>
+                <View className="fo-r mg-r">状态</View>
+              </View>
+              <View className="com-img">查看更多</View>
+              <View className="com-price">
+                <View className="fo-r mg-r">实付 ¥{item.priceSum}</View>
+              </View>
+            </View>
+            <View className="com-btn">
+              <View className="order-btn mg-r" onClick={this.handleDelete}>
+                删除
+              </View>
+              <View className="order-btn mg-r" onClick={this.goToEvaluation}>
+                去评价
+              </View>
+              <View className="order-btn repeat-btn">再次购买</View>
+            </View>
           </View>
-          <View className="com-img">查看更多</View>
-          <View className="com-price">
-            <View className="fo-r mg-r">实付 ¥740.70</View>
-          </View>
-        </View>
-        <View className="com-btn">
-          <View className="order-btn mg-r" onClick={this.handleDelete}>
-            删除
-          </View>
-          <View className="order-btn mg-r" onClick={this.goToEvaluation}>
-            去评价
-          </View>
-          <View className="order-btn repeat-btn">再次购买</View>
-        </View>
-      </View>
+        );
+      })
     );
   };
 
@@ -100,6 +105,10 @@ export default class Order extends Component {
       { title: "待评价" },
     ];
     const { current, isShow } = this.state;
+    const {
+      Order: { orderList },
+    } = this.props;
+    console.log(orderList, "_______+++++++++++");
     return (
       <View className="order-warp">
         <AtTabs
@@ -112,7 +121,16 @@ export default class Order extends Component {
             {/* <View style="padding: 60px 10px;text-align: center;">
               <Image src={NULLIMG}/>
             </View> */}
-            <View style="background-color: #FAFBFC;">{this.renderAll()}</View>
+            {orderList.length ? (
+              <View style="background-color: #FAFBFC;">
+                {this.renderAll(orderList)}
+                <View style={{textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>已经没有更多订单了</View>
+              </View>
+            ) : (
+              <View style="padding: 60px 10px;text-align: center;">
+                <Image src={NULLIMG} />
+              </View>
+            )}
           </AtTabsPane>
           <AtTabsPane current={current} index={1}>
             <View style="padding: 60px 10px;background-color: #FAFBFC;text-align: center;">
@@ -136,7 +154,7 @@ export default class Order extends Component {
           </AtTabsPane>
         </AtTabs>
         <AtModal
-          isOpened = {isShow}
+          isOpened={isShow}
           // title=""
           cancelText="取消"
           confirmText="删除"
@@ -149,3 +167,5 @@ export default class Order extends Component {
     );
   }
 }
+
+export default Order;

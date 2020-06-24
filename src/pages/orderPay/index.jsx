@@ -3,16 +3,25 @@ import { View } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 import { AtModal } from "taro-ui";
 import "./index.less";
-import { resetCart } from "../../actions/home";
+import { resetCart, resetSelected } from "../../actions/home";
+import { createOrder } from '../../actions/order'
 
 @connect(
-  ({ Home }) => ({
+  ({ Home, Order }) => ({
     Home,
+    Order
   }),
   (dispatch) => ({
     resetCart(payload) {
       dispatch(resetCart(payload));
     },
+    resetSelected(payload) {
+      dispatch(resetSelected(payload))
+    },
+    createOrder(payload) {
+      dispatch(createOrder(payload))
+    }
+    
   })
 )
 class OrderPay extends Component {
@@ -58,7 +67,7 @@ class OrderPay extends Component {
         return (
           <View className="cartItem" key={item.id}>
             <View className="cartImgWarp">
-              <View style={img}></View>
+              <Image src={item.url} style={img} />
             </View>
             <View className="cartContent">
               <View>名称：{item.title}</View>
@@ -84,6 +93,14 @@ class OrderPay extends Component {
   };
 
   handleConfirm = () => {
+    const { Home: { cartSum } } = this.props
+    const { sum } = this.state
+    let obj = {
+      createDate: new Date(),
+      count: cartSum.length,
+      priceSum: sum,
+      com_list: cartSum
+    }
     Taro.showLoading({
       title: "付款中",
       mask: true,
@@ -91,6 +108,8 @@ class OrderPay extends Component {
     setTimeout(() => {
       Taro.hideLoading();
       this.props.resetCart();
+      this.props.resetSelected()
+      this.props.createOrder(obj)
       Taro.switchTab({
         url: "../Home/index",
       });
@@ -100,29 +119,16 @@ class OrderPay extends Component {
     }, 2000);
   };
 
-  handleCartSum = () => {
-    const {
-      Home: { cartSum },
-    } = this.props;
-    let sum = "";
-    cartSum &&
-      cartSum.length &&
-      cartSum.forEach((item) => {
-        sum += item.price * item.selected;
-      });
-    console.log(sum, "最后的总价");
-    return 0;
-  };
-
   render() {
     const {
       Home: { cartSum },
+      Order
     } = this.props;
+    console.log(this.props, '________')
     const { isShow, sum } = this.state;
     const img = {
       width: "100%",
       height: "100%",
-      "background-image": "url(https://source.unsplash.com/random)",
       "background-size": "100% 100%",
       "background-repeat": "no-repeat",
     };

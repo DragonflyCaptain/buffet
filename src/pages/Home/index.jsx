@@ -37,7 +37,7 @@ class Home extends Component {
     this.state = {
       typeContent: "热搜推荐",
       searchVal: "",
-      selected: [],
+      selected: ["热搜推荐"],
     };
   }
 
@@ -159,7 +159,8 @@ class Home extends Component {
         return (
           <View key={item.id} className="every-last">
             <View className="every-img" onClick={() => this.goToDetail(item)}>
-              <View style={img}></View>
+              {/* <View style={img}></View> */}
+              <Image src={item.url} style={img}/>
             </View>
             <View className="every-title">
               <View className="title">
@@ -197,6 +198,7 @@ class Home extends Component {
 
   render() {
     const { typeContent, searchVal, selected } = this.state;
+    console.log(this.props, 'HOMHOMHOJOJOJOJO')
     const scrollItem = {
       height: "30px",
       "font-size": "12px",
@@ -206,7 +208,6 @@ class Home extends Component {
     const img = {
       width: "100%",
       height: "100%",
-      "background-image": "url(https://source.unsplash.com/random)",
       "background-size": "100% 100%",
       "background-repeat": "no-repeat",
     };

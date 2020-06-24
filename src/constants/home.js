@@ -8,3 +8,7 @@ export const REDUCE_SELECT = 'REDUCE_SELECT';
 export const SAVE_USER_INFO = 'SAVE_USER_INFO';
 
 export const SAVE_TYPE_DATA = 'SAVE_TYPE_DATA';
+
+export const CACHE_TYPE = 'CACHE_TYPE';
+
+export const RESET_SELECTED = 'RESET_SELECTED';
