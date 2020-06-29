@@ -8,8 +8,9 @@ import "./room.less";
 const sendMessage = require("../../../assets/static/send.png");
 
 @connect(
-  ({ message }) => ({
+  ({ message, Home }) => ({
     message,
+    Home,
   }),
   (dispatch) => ({
     sendMsg(payload) {
@@ -38,17 +39,22 @@ class Chatroom extends Component {
   componentDidMount() {}
 
   sendMsg = () => {
-    console.log("我发送一条消息");
-    this.props.sendMsg(this.state.msg)
+    if (this.state.msg === "") return;
+    let obj = {
+      text: this.state.msg,
+      Marking: 1,
+      id: Math.random(),
+    };
+    this.props.sendMsg(obj);
     this.setState({
-        msg: ''
-    })
+      msg: "",
+    });
   };
 
-  handleChange = (value) => {
-    console.log(value);
+  handleChange = (e) => {
+    let text = e.detail.value;
     this.setState({
-      msg: value,
+      msg: text,
     });
   };
 
@@ -57,9 +63,31 @@ class Chatroom extends Component {
       data &&
       data.length &&
       data.map((item) => {
-        return <View key={item}>{item}</View>;
+        return (
+          <View className="message" key={item.id}>
+            <View className="msg-text">{item.text}</View>
+            {/* <View>{item.text}</View> */}
+            <View className="msg-img">
+              <Image src={sendMessage} />
+            </View>
+          </View>
+        );
       })
     );
+  };
+
+  handleConfirm = (e) => {
+    let text = e.detail.value;
+    if (!text || text === "") return;
+    let obj = {
+      text,
+      Marking: 1,
+      id: Math.random(),
+    };
+    this.props.sendMsg(obj);
+    this.setState({
+      msg: "",
+    });
   };
 
   render() {
@@ -68,20 +96,20 @@ class Chatroom extends Component {
     const {
       message: { msgList },
     } = this.props;
-    console.log(msg, "_____");
     return (
       <View className="room-warp">
-        <View className="message-warp">
-          {this.renderMessage(msgList)}
-        </View>
+        <View className="message-warp">{this.renderMessage(msgList)}</View>
         <View className="features">
           <View className="entry-warp">
-            <AtInput
-              type="text"
-              placeholder="输入消息"
-              onChange={this.handleChange}
+            <Input
               className="input-msg"
+              placeholder="输入消息"
+              confirmType="send"
+              onConfirm={this.handleConfirm}
               value={msg}
+              onInput={this.handleChange}
+              confirmHold={true}
+              // adjustPosition={false}
             />
           </View>
           <View className="send-warp">
