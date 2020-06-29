@@ -5,6 +5,7 @@ import { AtModal } from "taro-ui";
 import "./index.less";
 import { resetCart, resetSelected } from "../../actions/home";
 import { createOrder } from '../../actions/order'
+import * as api from "../../servers/servers";
 
 @connect(
   ({ Home, Order }) => ({
@@ -92,31 +93,39 @@ class OrderPay extends Component {
     });
   };
 
-  handleConfirm = () => {
-    const { Home: { cartSum } } = this.props
+  handleConfirm = async () => {
+    const { Home: { cartSum, userInfo } } = this.props
     const { sum } = this.state
     let obj = {
-      createDate: new Date(),
-      count: cartSum.length,
-      priceSum: sum,
-      com_list: cartSum
+      userInfo,
+      productList: cartSum,
+      phoneNum: '8008208820',
+      address: '测试地址',
+      consignee: '测试收货人平小北',
+      priceTotal: sum,
+      remarks: '',
+      status: '1',  // 0：代付款  1：已完成  2：已取消
+      payMethod: '0', // 0: 微信支付  1： 支付宝
+      productTotal: cartSum.length,
     }
     Taro.showLoading({
       title: "付款中",
       mask: true,
     });
-    setTimeout(() => {
+    const { code } = await api.submitOrder(obj)
+    if( code === 0){
       Taro.hideLoading();
       this.props.resetCart();
       this.props.resetSelected()
-      this.props.createOrder(obj)
-      Taro.switchTab({
-        url: "../Home/index",
-      });
+      Taro.navigateTo({
+        url: '../SuccessPage/index'
+      })
       this.setState({
         isShow: false,
       });
-    }, 2000);
+    }else{
+      Taro.hideLoading();
+    }
   };
 
   render() {
@@ -124,7 +133,6 @@ class OrderPay extends Component {
       Home: { cartSum },
       Order
     } = this.props;
-    console.log(this.props, '________')
     const { isShow, sum } = this.state;
     const img = {
       width: "100%",

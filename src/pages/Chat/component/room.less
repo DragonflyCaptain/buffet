@@ -1,0 +1,38 @@
+.room-warp {
+  width: 100%;
+  height: 100%;
+  background: #f7f7f7;
+  .message-warp {
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: auto;
+  }
+  .features {
+    width: 100%;
+    height: 140px;
+    background: #cacaca;
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .entry-warp {
+      flex: 3;
+      .input-msg {
+        background: #fff;
+        width: 80%;
+        height: 50%;
+        float: right;
+        margin-right: 20px;
+        border-radius: 10px;
+      }
+    }
+    .send-warp {
+      flex: 1;
+      .send {
+        width: 40px;
+        height: 40px;
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { CREATE_ORDER, DEL_ORDER } from "../constants/order";
+import { CREATE_ORDER, DEL_ORDER, SAVE_ORDER_DATA } from "../constants/order";
 
 const INITIAL_STATE = {
   orderList: [],
@@ -20,6 +20,11 @@ export default function Order(state = INITIAL_STATE, action) {
       return {
         ...state,
       };
+    case SAVE_ORDER_DATA:
+      return {
+        ...state,
+        orderList: action.payload
+      }
     default:
       return state;
   }

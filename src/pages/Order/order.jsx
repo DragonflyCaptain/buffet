@@ -2,14 +2,20 @@ import Taro, { Component } from "@tarojs/taro";
 import { View, Button } from "@tarojs/components";
 import { AtTabs, AtTabsPane, AtModal } from "taro-ui";
 import { connect } from "@tarojs/redux";
+import * as api from '../../servers/servers';
+import { saveOrderData } from '../../actions/order'
 import "./index.less";
 
 const NULLIMG = require("../../assets/static/null.jpg");
 @connect(
   ({ Order }) => ({
     Order,
+  }),
+  (dispatch) => ({
+    saveOrderData(payload) {
+      dispatch(saveOrderData(payload))
+    }
   })
-  // (dispatch) => ({})
 )
 class Order extends Component {
   constructor() {
@@ -22,7 +28,9 @@ class Order extends Component {
 
   componentWillMount() {}
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.getAllOrder()
+  }
 
   componentWillUnmount() {}
 
@@ -33,6 +41,11 @@ class Order extends Component {
   config = {
     navigationBarTitleText: "我的订单",
   };
+
+  getAllOrder = async () => {
+    const { code, data } = await api.findOrder()
+    this.props.saveOrderData(data)
+  }
 
   handleClick = (value) => {
     console.log(value);
@@ -74,11 +87,13 @@ class Order extends Component {
             <View className="com-detail">
               <View className="com-title">
                 <View className="fo-l mg-l">店名</View>
-                <View className="fo-r mg-r">状态</View>
+                <View className="fo-r mg-r">{item.status}</View>
               </View>
-              <View className="com-img">查看更多</View>
+              <View className="com-img">
+                {this.renderChild(item.productList)}
+              </View>
               <View className="com-price">
-                <View className="fo-r mg-r">实付 ¥{item.priceSum}</View>
+                <View className="fo-r mg-r">实付金额 ¥{item.priceTotal}</View>
               </View>
             </View>
             <View className="com-btn">
@@ -95,6 +110,14 @@ class Order extends Component {
       })
     );
   };
+
+  renderChild = data => {
+    return data && data.length && data.map((item, index)=>{
+      if(index<3){
+        return <Image className="testImage" src={item.url} key={item.title} />
+      }
+    })
+  }
 
   render() {
     const tabList = [

@@ -21,3 +21,18 @@ export const getAllCommodityData_server = ( getData ) => {
 export const clickTypeRequest = (params) => {
   return HTTPREQUEST.get(`/api/commodity/field/?${stringify(params)}`)
 }
+
+// 提交订单
+export const submitOrder = params => {
+  return HTTPREQUEST.post('/api/order', params)
+}
+
+// 查询订单(全部)
+export const findOrder = () => {
+  return HTTPREQUEST.get('/api/order/find')
+}
+
+//查询订单（条件）
+export const findOrderParams = (params) => {
+  return HTTPREQUEST.get('/api/order/findType', params)
+}

@@ -1,5 +1,6 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Text, ScrollView } from "@tarojs/components";
+import './chat.less'
 
 export default class Chat extends Component {
   constructor() {
@@ -13,27 +14,27 @@ export default class Chat extends Component {
 
   componentDidMount() {
 
-    Taro.connectSocket({
-      url: 'ws://echo.websocket.org/echo',
-      success: function () {
-        console.log('connect success')
-      }
-    }).then(task => {
-      task.onOpen(function () {
-        console.log('onOpen')
-        task.send({ data: 'xxx' })
-      })
-      task.onMessage(function (msg) {
-        console.log('onMessage: ', msg)
-        task.close()
-      })
-      task.onError(function () {
-        console.log('onError')
-      })
-      task.onClose(function (e) {
-        console.log('onClose: ', e)
-      })
-    })
+    // Taro.connectSocket({
+    //   url: 'ws://echo.websocket.org/echo',
+    //   success: function () {
+    //     console.log('connect success')
+    //   }
+    // }).then(task => {
+    //   task.onOpen(function () {
+    //     console.log('onOpen')
+    //     task.send({ data: 'xxx' })
+    //   })
+    //   task.onMessage(function (msg) {
+    //     console.log('onMessage: ', msg)
+    //     task.close()
+    //   })
+    //   task.onError(function () {
+    //     console.log('onError')
+    //   })
+    //   task.onClose(function (e) {
+    //     console.log('onClose: ', e)
+    //   })
+    // })
   }
 
   componentWillUnmount() {}
@@ -46,11 +47,40 @@ export default class Chat extends Component {
     navigationBarTitleText: "聊天室",
   };
 
+  goToRoom (roomTitle) {
+    Taro.navigateTo({
+      url: `./component/room?roomName=${roomTitle}`
+    })
+  }
+
+  renderChatList = data => {
+    return data.map(item=>{
+      return(
+        <View className="item-room" key={item.title} onClick={()=>this.goToRoom(item.title)}>
+          {item.title}
+        </View>
+      )
+    })
+  }
+
   render() {
-    
+    const List = [
+      {
+        title: '官路'
+      },{
+        title: '郭河'
+      }, {
+        title: '协伟'
+      }, {
+        title: '官伟'
+      }
+    ]
     return (
-      <View className="home">
-          ChatPage
+      <View className="chat-warp">
+          {/* ChatPage */}
+        <View className="chat-list-warp">
+          {this.renderChatList(List)}
+        </View>
       </View>
     );
   }

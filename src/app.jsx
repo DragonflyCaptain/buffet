@@ -25,6 +25,7 @@ class App extends Component {
 
   config = {
     pages: [
+      'pages/Chat/chat',
       'pages/Home/index',
       'pages/Cart/index',
       'pages/User/index',
@@ -34,8 +35,9 @@ class App extends Component {
       'pages/Address/addressList',
       'pages/Address/editAddress',
       'pages/About/about',
-      'pages/Chat/chat',
+      'pages/Chat/component/room',
       'pages/Entry/index',
+      'pages/SuccessPage/index',
     ],
     window: {
       backgroundTextStyle: "light",
@@ -59,6 +61,11 @@ class App extends Component {
           iconPath: "./assets/tab-bar/cart.png",
           selectedIconPath: "./assets/tab-bar/carted.png",
           text: "购物车"
+        },{
+          pagePath: "pages/Chat/chat",
+          iconPath: "./assets/tab-bar/user.png",
+          selectedIconPath: "./assets/tab-bar/userd.png",
+          text: "Chat",
         },{
           pagePath: "pages/User/index",
           iconPath: "./assets/tab-bar/user.png",
