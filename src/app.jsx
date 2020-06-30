@@ -25,6 +25,7 @@ class App extends Component {
 
   config = {
     pages: [
+      'pages/Chat/component/room',
       'pages/Chat/chat',
       'pages/Home/index',
       'pages/Cart/index',
@@ -35,7 +36,6 @@ class App extends Component {
       'pages/Address/addressList',
       'pages/Address/editAddress',
       'pages/About/about',
-      'pages/Chat/component/room',
       'pages/Entry/index',
       'pages/SuccessPage/index',
     ],

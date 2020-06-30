@@ -23,6 +23,7 @@ class Chatroom extends Component {
     super(...arguments);
     this.state = {
       msg: "",
+      keyCodeH: 0
     };
   }
 
@@ -31,10 +32,10 @@ class Chatroom extends Component {
   };
 
   componentWillMount() {
-    const { roomName } = this.$router.params;
-    Taro.setNavigationBarTitle({
-      title: roomName,
-    });
+    // const { roomName } = this.$router.params;
+    // Taro.setNavigationBarTitle({
+    //   title: roomName,
+    // });
   }
   componentDidMount() {}
 
@@ -44,6 +45,7 @@ class Chatroom extends Component {
       text: this.state.msg,
       Marking: 1,
       id: Math.random(),
+      url: "https://source.unsplash.com/random",
     };
     this.props.sendMsg(obj);
     this.setState({
@@ -63,13 +65,26 @@ class Chatroom extends Component {
       data &&
       data.length &&
       data.map((item) => {
+        if (item.Marking === 1) {
+          return (
+            <View className="message" key={item.id}>
+              <View className="msg-img">
+                <Image src={item.url} />
+              </View>
+              <View className="msg-text">{item.text}</View>
+            </View>
+          );
+        }
         return (
-          <View className="message" key={item.id}>
-            <View className="msg-text">{item.text}</View>
-            {/* <View>{item.text}</View> */}
+          <View className="other-message" key={item.id}>
             <View className="msg-img">
+              <Image src={item.url} />
+            </View>
+            <View className="msg-text">{item.text}</View>
+            {/* <View className="msg-img">
               <Image src={sendMessage} />
             </View>
+            <View className="msg-text">{item.text}</View> */}
           </View>
         );
       })
@@ -83,6 +98,7 @@ class Chatroom extends Component {
       text,
       Marking: 1,
       id: Math.random(),
+      url: "https://source.unsplash.com/random",
     };
     this.props.sendMsg(obj);
     this.setState({
@@ -90,15 +106,44 @@ class Chatroom extends Component {
     });
   };
 
+  onScroll = (e) => {
+    console.log(e.detail);
+  }
+
+  onScrollToUpper = e => {
+      console.log(e, '_________')
+  }
+
+  testFocus =(e) => {
+    console.log(e.detail, '_________')
+    this.setState({
+        keyCodeH: e.detail.height
+    })
+  }
+
   render() {
     const { roomName } = this.$router.params;
-    const { msg } = this.state;
+    const { msg, keyCodeH } = this.state;
     const {
       message: { msgList },
     } = this.props;
+    const scrollTop = 0;
+    const Threshold = 20;
+    console.log(keyCodeH)
     return (
-      <View className="room-warp">
-        <View className="message-warp">{this.renderMessage(msgList)}</View>
+      <View>
+        <ScrollView
+          className="scrollview buff-scroll"
+          scrollY
+          scrollWithAnimation
+          scrollTop={scrollTop}
+          lowerThreshold={Threshold}
+          upperThreshold={Threshold}
+          onScrollToUpper={this.onScrollToUpper} // 使用箭头函数的时候 可以这样写 `onScrollToUpper={this.onScrollToUpper}`
+          onScroll={this.onScroll}
+        >
+          {this.renderMessage(msgList)}
+        </ScrollView>
         <View className="features">
           <View className="entry-warp">
             <Input
@@ -109,7 +154,10 @@ class Chatroom extends Component {
               value={msg}
               onInput={this.handleChange}
               confirmHold={true}
-              // adjustPosition={false}
+              adjustPosition={false}
+              onFocus={this.testFocus}
+              style="bottom: 367px"
+            //   scrollIntoView={`${msgList[msgList.length-1].id}`}
             />
           </View>
           <View className="send-warp">
