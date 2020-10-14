@@ -81,7 +81,7 @@ class Order extends Component {
       data.length &&
       data.map((item, index) => {
         return (
-          <View className="com-all-warp" key={index}>
+          <View className="com-all-warp" key={`*${index}`}>
             <View className="com-detail">
               <View className="com-title">
                 <View className="fo-l mg-l">店名</View>
