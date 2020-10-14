@@ -1,6 +1,6 @@
-import Taro, { Component } from "@tarojs/taro";
+import Taro, { Component, scanCode } from "@tarojs/taro";
 import { View, Picker } from "@tarojs/components";
-import { AtInput, AtButton, AtList, AtListItem } from "taro-ui";
+import { AtInput, AtButton, AtList, AtListItem, AtMessage } from "taro-ui";
 import { categoryList } from "../../common/category";
 import * as api from "../../servers/servers";
 
@@ -9,7 +9,7 @@ export default class Index extends Component {
     super(...arguments);
     this.state = {
       formData: {
-        title: "", // 名字
+        title: '', // 名字
         stock: 100,
         url: "https://source.unsplash.com/random",
         price: 0,
@@ -48,6 +48,12 @@ export default class Index extends Component {
   }
   onSubmit = async () => {
     let obj = this.state.formData;
+    if(!obj.title || obj.title === ''){
+      return Taro.atMessage({
+        'message': '输入必填项后提交',
+        duration: 1000
+      })
+    }
     Taro.showLoading({
       title: "loading",
       mask: true,
@@ -59,7 +65,6 @@ export default class Index extends Component {
     });
     const { code } = await api.enterData_server(obj);
     if (code === 0) {
-      console.log(code);
       this.setState({
         formData: {
           title: "", // 名字
@@ -73,12 +78,33 @@ export default class Index extends Component {
     }
   };
 
+  onScanning = () => {
+    scanCode({
+      success: async res => {
+        console.log(res, '_______')
+        const { result } = res;
+        const response = await api.scanningTwo(result, 'scanning')
+        console.log(response, 'responseresponse')
+        this.setState({
+          formData: {
+            title: response.result.goodsName , // 名字
+            stock: 100,
+            url: response.result.img,
+            price: response.result.price,
+            category: "",
+          },
+        })
+      }
+    })
+  }
+
   render() {
     const { formData, selector } = this.state;
     const { title, stock, price, category, url } = formData;
     console.log(formData);
     return (
       <View>
+        <AtMessage />
         <AtInput
           name="title"
           title="名称"
@@ -121,7 +147,11 @@ export default class Index extends Component {
           value={url}
           onChange={(value) => this.handleChange(value, "url")}
         />
+        <View>
+          <AtButton style={{}} onClick={this.onScanning}>扫描</AtButton>
+        </View>
         <AtButton onClick={this.onSubmit}>提交</AtButton>
+
       </View>
     );
   }

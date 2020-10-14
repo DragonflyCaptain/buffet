@@ -36,3 +36,13 @@ export const findOrder = () => {
 export const findOrderParams = (params) => {
   return HTTPREQUEST.get('/api/order/findType', params)
 }
+
+// 查询条形码
+export const  scanning = (params, type) => {
+  return HTTPREQUEST.scanningGet(`/barcode/barcode?barcode=${params}`, type)
+}
+
+// 查询条形码
+export const  scanningTwo = (params, type) => {
+  return HTTPREQUEST.scanningGet(`/querybarcode?code=${params}`, type)
+}
