@@ -1,12 +1,16 @@
 .room-warp {
-  width: 100%;
-  min-height: 100vh;
-  background: #f7f7f7;
-  .message-warp {
-    width: 100%;
-    height: 80%;
-    // overflow-y: auto;
-    margin-bottom: 16.5%;
+  // width: 100%;
+  // min-height: 100vh;
+  // background: #f7f7f7;
+
+  .buff-scroll {
+    height: 100vh;
+    // height: 80%;
+    // height: 1006px;
+    // background: #f7f7f7;
+    background: pink;
+    //   padding-bottom: calc(env(safe-area-inset-bottom));
+    padding-bottom: 100px;
     .message {
       width: 100%;
       margin-bottom: 20px;
@@ -18,14 +22,14 @@
         min-width: 50px;
         text-align: left;
         padding: 20px;
-        margin-right: 20px;
+        margin-right: 30px;
         font-size: 25px;
         word-wrap: break-word;
         border-radius: 8px;
         background: #83f055;
       }
       .msg-img {
-        background: cyan;
+        // background: cyan;
         width: 80px;
         height: 80px;
         margin-right: 10px;
@@ -46,7 +50,7 @@
       .msg-img {
         width: 80px;
         height: 80px;
-        background: red;
+        // background: red;
         text-align: center;
         line-height: 80px;
         margin-left: 15px;
@@ -57,8 +61,8 @@
         }
       }
       .msg-text {
-        margin-left: 15px;
-        background: #83f055;
+        margin-left: 30px;
+        background: #fff;
         min-width: 50px;
         max-width: 200px;
         font-size: 25px;
@@ -69,133 +73,37 @@
       }
     }
   }
+
   .features {
     width: 100%;
-    height: 10%;
-    background: #cacaca;
+    height: 100px;
+    background: #f7f7f7;
     position: fixed;
     bottom: 0;
     display: flex;
-    justify-content: space-between;
+    //   justify-content: space-between;
     align-items: center;
+    padding-bottom: calc(env(safe-area-inset-bottom) / 2);
+    border-top: 1px solid pink;
     .entry-warp {
-      flex: 3;
+      background: #f7f7f7;
+      width: 65%;
+      height: 65%;
+      line-height: 100px;
+      margin-left: 100px;
       .input-msg {
         background: #fff;
-        width: 80%;
-        height: 50%;
-        float: right;
-        margin-right: 20px;
-        border-radius: 10px;
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
       }
     }
     .send-warp {
-      flex: 1;
+      margin-left: 20px;
       .send {
-        width: 40px;
-        height: 40px;
+        width: 60px;
+        height: 60px;
       }
-    }
-  }
-}
-
-.buff-scroll {
-  min-height: 100vh;
-  background: #f7f7f7;
-  //   padding-bottom: calc(env(safe-area-inset-bottom));
-  padding-bottom: 100px;
-  .message {
-    width: 100%;
-    margin-bottom: 20px;
-    padding-top: 10px;
-    display: flex;
-    flex-direction: row-reverse;
-    .msg-text {
-      max-width: 200px;
-      min-width: 50px;
-      text-align: left;
-      padding: 20px;
-      margin-right: 20px;
-      font-size: 25px;
-      word-wrap: break-word;
-      border-radius: 8px;
-      background: #83f055;
-    }
-    .msg-img {
-      background: cyan;
-      width: 80px;
-      height: 80px;
-      margin-right: 10px;
-      text-align: center;
-      line-height: 80px;
-      border-radius: 10px;
-      image {
-        width: 100%;
-        height: 100%;
-      }
-    }
-  }
-  .other-message {
-    width: 100%;
-    margin-top: 20px;
-    display: flex;
-    flex-direction: row;
-    .msg-img {
-      width: 80px;
-      height: 80px;
-      background: red;
-      text-align: center;
-      line-height: 80px;
-      margin-left: 15px;
-      border-radius: 10px;
-      image {
-        width: 100%;
-        height: 100%;
-      }
-    }
-    .msg-text {
-      margin-left: 15px;
-      background: #83f055;
-      min-width: 50px;
-      max-width: 200px;
-      font-size: 25px;
-      text-align: left;
-      border-radius: 8px;
-      word-wrap: break-word;
-      padding: 20px;
-    }
-  }
-}
-
-.features {
-  width: 100%;
-  height: 100px;
-  background: #f7f7f7;
-  position: fixed;
-  bottom: 0;
-  display: flex;
-  //   justify-content: space-between;
-  align-items: center;
-  padding-bottom: calc(env(safe-area-inset-bottom) / 2);
-  border-top: 1px solid pink;
-  .entry-warp {
-    background: #f7f7f7;
-    width: 65%;
-    height: 65%;
-    line-height: 100px;
-    margin-left: 100px;
-    .input-msg {
-      background: #fff;
-      width: 100%;
-      height: 100%;
-      border-radius: 8px;
-    }
-  }
-  .send-warp {
-    margin-left: 20px;
-    .send {
-      width: 60px;
-      height: 60px;
     }
   }
 }

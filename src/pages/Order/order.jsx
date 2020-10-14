@@ -48,14 +48,12 @@ class Order extends Component {
   }
 
   handleClick = (value) => {
-    console.log(value);
     this.setState({
       current: value,
     });
   };
 
   handleDelete = () => {
-    console.log("我要删除这个订单");
     this.setState({
       isShow: true,
     });
@@ -131,7 +129,6 @@ class Order extends Component {
     const {
       Order: { orderList },
     } = this.props;
-    console.log(orderList, "_______+++++++++++");
     return (
       <View className="order-warp">
         <AtTabs

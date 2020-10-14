@@ -23,7 +23,7 @@ class Chatroom extends Component {
     super(...arguments);
     this.state = {
       msg: "",
-      keyCodeH: 0
+      keyCodeH: 0,
     };
   }
 
@@ -37,7 +37,30 @@ class Chatroom extends Component {
     //   title: roomName,
     // });
   }
-  componentDidMount() {}
+  componentDidMount() {
+    // this.scrollMsgBottom();
+    // Taro.connectSocket({
+    //   url: 'ws://echo.websocket.org/echo',
+    //   success: function () {
+    //     console.log('connect success')
+    //   }
+    // }).then(task => {
+    //   task.onOpen(function () {
+    //     console.log('onOpen')
+    //     task.send({ data: 'xxx' })
+    //   })
+    //   task.onMessage(function (msg) {
+    //     console.log('onMessage: ', msg)
+    //     task.close()
+    //   })
+    //   task.onError(function () {
+    //     console.log('onError')
+    //   })
+    //   task.onClose(function (e) {
+    //     console.log('onClose: ', e)
+    //   })
+    // })
+  }
 
   sendMsg = () => {
     if (this.state.msg === "") return;
@@ -107,19 +130,12 @@ class Chatroom extends Component {
   };
 
   onScroll = (e) => {
-    console.log(e.detail);
-  }
+    // console.log(e.detail, '滚动事件');
+  };
 
-  onScrollToUpper = e => {
-      console.log(e, '_________')
-  }
-
-  testFocus =(e) => {
-    console.log(e.detail, '_________')
-    this.setState({
-        keyCodeH: e.detail.height
-    })
-  }
+  onScrollToUpper = (e) => {
+    // console.log(e, "滚动最上面");
+  };
 
   render() {
     const { roomName } = this.$router.params;
@@ -127,19 +143,11 @@ class Chatroom extends Component {
     const {
       message: { msgList },
     } = this.props;
-    const scrollTop = 0;
-    const Threshold = 20;
-    console.log(keyCodeH)
     return (
-      <View>
+      <View className="room-warp">
         <ScrollView
           className="scrollview buff-scroll"
           scrollY
-          scrollWithAnimation
-          scrollTop={scrollTop}
-          lowerThreshold={Threshold}
-          upperThreshold={Threshold}
-          onScrollToUpper={this.onScrollToUpper} // 使用箭头函数的时候 可以这样写 `onScrollToUpper={this.onScrollToUpper}`
           onScroll={this.onScroll}
         >
           {this.renderMessage(msgList)}
@@ -157,7 +165,6 @@ class Chatroom extends Component {
               adjustPosition={false}
               onFocus={this.testFocus}
               style="bottom: 367px"
-            //   scrollIntoView={`${msgList[msgList.length-1].id}`}
             />
           </View>
           <View className="send-warp">

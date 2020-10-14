@@ -24,7 +24,6 @@ class UserPage extends Component {
   }
 
   componentWillMount() {
-    console.log(123123, 'IIII')
   }
 
   componentDidMount() {}
@@ -78,7 +77,7 @@ class UserPage extends Component {
         </View>: <View className="userInfo-warp">
                   <AtAvatar className="no-info-img" image={`${avatarUrl || 'https://jdc.jd.com/img/200'}`}></AtAvatar>
                   <Button open-type='getUserInfo' className="get-user-info-btn" onGetUserInfo={this.handleGetUserInfo}>
-                    点击显示微信头像
+                    点击获取用户信息
                   </Button>
                 </View>
         }

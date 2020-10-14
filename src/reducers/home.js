@@ -23,15 +23,14 @@ const INITIAL_STATE = {
 const addData = (state, obj) => {
   let type = obj.type;
   let index = obj.index;
-  console.log(obj, "addData");
   let newObj = state;
   newObj[type][index].selected += 1;
+  debugger;
   return newObj;
 };
 
 const reduceData = (data, obj) => {
   const { type, index} = obj;
-  console.log(obj, "reduceData");
   let newObj = data;
   newObj[type][index].selected -= 1;
   return newObj;
@@ -39,15 +38,14 @@ const reduceData = (data, obj) => {
 
 const renderCartAdd = (data, obj) => {
   let item = obj.item;
-  console.log(item, "________");
   if (!data.includes(item)) {
     data.push(item);
   }
+  debugger;
   return data;
 };
 
 const renderCartReduce = (data, obj) => {
-  console.log(obj, '|||||')
   let item = obj.item;
   if (item.selected < 1) {
     data.forEach((val, index) => {

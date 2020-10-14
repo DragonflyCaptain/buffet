@@ -6,6 +6,8 @@ import { addSelect, reduceSelect, saveUserInfo } from "../../actions/home";
 
 import "./index.less";
 
+const NOCART = require('../../assets/static/nocart.png');
+
 @connect(
   ({ count, Home }) => ({
     count,
@@ -46,7 +48,6 @@ class Cart extends Component {
   };
 
   cartAdd = (item, index) => {
-    console.log("购物车增加", this.props);
     let obj = {
       name: item.title,
       index,
@@ -56,7 +57,6 @@ class Cart extends Component {
   };
 
   cartReduce = (item, index) => {
-    console.log("购物车减少");
     let obj = {
       name: item.title,
       index,
@@ -66,6 +66,7 @@ class Cart extends Component {
   };
 
   renderSelectedCart = (data, img) => {
+    console.log('最后渲染的是什么', data)
     return (
       data &&
       data.length &&
@@ -142,7 +143,9 @@ class Cart extends Component {
           title="购物车"
           thumb="http://www.logoquan.com/upload/list/20180421/logoquan15259400209.PNG"
         >
-          {this.renderSelectedCart(cartSum, img)}
+          {
+            cartSum.length? this.renderSelectedCart(cartSum, img):<Image src={NOCART} />
+          }
         </AtCard>
         {cartSum.length ? (
           <View className="goToPay">

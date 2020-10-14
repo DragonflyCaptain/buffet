@@ -6,13 +6,13 @@ import {
   addCommodity,
   reduceCommodity,
   saveUserInfo,
-  saveTypeData
+  saveTypeData,
 } from "../../actions/home";
-import { dataList } from '../../common/config'
+import { dataList } from "../../common/config";
 import * as api from "../../servers/servers";
 import "./index.less";
 
-const CartImg = require('../../assets/tab-bar/cart.png') 
+const CartImg = require("../../assets/tab-bar/cart.png");
 
 @connect(
   ({ Home }) => ({ Home }),
@@ -27,8 +27,8 @@ const CartImg = require('../../assets/tab-bar/cart.png')
       dispatch(saveUserInfo(payload));
     },
     saveTypeData(payload) {
-      dispatch( saveTypeData(payload) )
-    }
+      dispatch(saveTypeData(payload));
+    },
   })
 )
 class Home extends Component {
@@ -41,37 +41,37 @@ class Home extends Component {
     };
   }
 
-  componentWillMount() { }
+  componentWillMount() {}
 
-  requestHomeData = async (params, text=this.state.typeContent) =>{
+  requestHomeData = async (params, text = this.state.typeContent) => {
     Taro.showLoading({
       title: "loading",
       mask: true,
-    })
-    const {code, data} = await api.clickTypeRequest(params)
-    if(code === 0){
-      data.forEach(item=>{
-        item['selected'] = 0
-      })
+    });
+    const { code, data } = await api.clickTypeRequest(params);
+    if (code === 0) {
+      data.forEach((item) => {
+        item["selected"] = 0;
+      });
       const obj = {
         text,
-        data: data
-      }
-      this.props.saveTypeData(obj)
+        data: data,
+      };
+      this.props.saveTypeData(obj);
       Taro.hideLoading();
     }
-  }
+  };
 
   componentDidMount() {
-    const { typeContent } = this.state
-    this.requestHomeData( { category: typeContent } )
+    const { typeContent } = this.state;
+    this.requestHomeData({ category: typeContent });
   }
 
   componentWillUnmount() {}
 
-  componentDidShow() { console.log('componentDidShow')}
+  componentDidShow() {}
 
-  componentDidHide() {console.log('componentDidHide')}
+  componentDidHide() {}
 
   config = {
     navigationBarTitleText: "首页",
@@ -79,19 +79,19 @@ class Home extends Component {
 
   handleTypeClick(item) {
     let arr = this.state.selected;
-    if(!arr.includes(item)){
-      arr.push(item)
+    if (!arr.includes(item)) {
+      arr.push(item);
       let params = {
-        category: item
-      }
+        category: item,
+      };
       this.setState({
-        selected: arr
+        selected: arr,
       });
-      this.requestHomeData(params, item)
+      this.requestHomeData(params, item);
     }
     this.setState({
-      typeContent: item
-    })
+      typeContent: item,
+    });
   }
 
   onChange = (value) => {
@@ -119,12 +119,9 @@ class Home extends Component {
     // return <View style={scrollItem}></View>;
   };
 
-  handlImgClick(item) {
-    console.log(item);
-  }
+  handlImgClick(item) {}
 
   addItem(item, index, type) {
-    console.log('首页增加商品数量')
     this.props.addCommodity({
       name: item.title,
       type,
@@ -133,7 +130,6 @@ class Home extends Component {
     });
   }
   reduceItem(item, index, type) {
-    console.log('首页减少商品数量')
     this.props.reduceCommodity({
       name: item.title,
       type,
@@ -142,8 +138,13 @@ class Home extends Component {
     });
   }
 
-  goToDetail = (obj) => {
-    let newObj = JSON.stringify(obj);
+  goToDetail = (item, index, type) => {
+    let newObj = JSON.stringify({
+      name: item.title,
+      type,
+      index,
+      item,
+    });
     Taro.navigateTo({
       url: `../commodityDetail/index?params=${newObj}`,
     });
@@ -158,9 +159,11 @@ class Home extends Component {
       return data.map((item, index) => {
         return (
           <View key={item.id} className="every-last">
-            <View className="every-img" onClick={() => this.goToDetail(item)}>
-              {/* <View style={img}></View> */}
-              <Image src={item.url} style={img}/>
+            <View
+              className="every-img"
+              onClick={() =>this.goToDetail(item, index, typeContent)}
+            >
+              <Image src={item.url} style={img} />
             </View>
             <View className="every-title">
               <View className="title">
@@ -192,13 +195,12 @@ class Home extends Component {
 
   goToCart = () => {
     Taro.switchTab({
-      url: '../Cart/index'
-    })
-  }
+      url: "../Cart/index",
+    });
+  };
 
   render() {
-    const { typeContent, searchVal, selected } = this.state;
-    console.log(this.props, 'HOMHOMHOJOJOJOJO')
+    const { typeContent, searchVal, selected, statusBarHeight } = this.state;
     const scrollItem = {
       height: "30px",
       "font-size": "12px",

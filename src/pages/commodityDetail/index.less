@@ -1,14 +1,42 @@
 .detail-warp{
     width: 100%;
     height: 100%;
-    background: cyan;
+    // background: cyan;
     .big-pic{
         width: 100%;
-        height: 12.5rem;
-        background: red;
+        height: 400px;
+        // background: red;
     }
     .content-warp{
-        margin: .825rem;
+        margin: 15px;
         
+    }
+    .detail-menu{
+        position:fixed;
+        bottom: 0;
+        width: 100%;
+        height: 100px;
+        // background: pink;
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        border: 1px solid #f7f7ff;
+
+        .public { 
+            height: 40px;
+            border-radius: 40px;
+            text-align: center;
+            line-height: 40px;
+            padding: 10px 30px;
+            font-size: 25px;
+            color: #fff;
+        }
+        .pay{
+            background: red;
+        }
+        .cart{
+            background: orange;
+        }
+
     }
 }

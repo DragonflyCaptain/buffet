@@ -35,7 +35,6 @@ export default class Index extends Component {
   };
 
   handleChange(value, field) {
-    console.log(value, field);
     let obj = this.state.formData;
     obj[field] = value;
     if (field === "category") {
@@ -59,7 +58,6 @@ export default class Index extends Component {
     });
     const { code } = await api.enterData_server(obj);
     if (code === 0) {
-      console.log(code);
       this.setState({
         formData: {
           title: "", // 名字
@@ -76,7 +74,6 @@ export default class Index extends Component {
   render() {
     const { formData, selector } = this.state;
     const { title, stock, price, category, url } = formData;
-    console.log(formData);
     return (
       <View>
         <AtInput

@@ -25,13 +25,13 @@ class App extends Component {
 
   config = {
     pages: [
+      'pages/Home/index',
       'pages/Chat/component/room',
       'pages/Chat/chat',
-      'pages/Home/index',
+      'pages/commodityDetail/index',
       'pages/Cart/index',
       'pages/User/index',
       'pages/Order/order',
-      'pages/commodityDetail/index',
       'pages/orderPay/index',
       'pages/Address/addressList',
       'pages/Address/editAddress',
@@ -44,6 +44,7 @@ class App extends Component {
       navigationBarBackgroundColor: "#fff",
       navigationBarTitleText: "WeChat",
       navigationBarTextStyle: "black",
+      // navigationStyle: "custom"
     },
     tabBar: {
       color: "#666",
