@@ -7,11 +7,11 @@ import {
   RESET_CART,
   SAVE_TYPE_DATA,
   CACHE_TYPE,
-  RESET_SELECTED
+  RESET_SELECTED,
 } from "../constants/home";
 
 function random(lower, upper) {
-	return Math.floor(Math.random() * (upper - lower)) + lower;
+  return Math.floor(Math.random() * (upper - lower)) + lower;
 }
 
 const INITIAL_STATE = {
@@ -25,12 +25,11 @@ const addData = (state, obj) => {
   let index = obj.index;
   let newObj = state;
   newObj[type][index].selected += 1;
-  debugger;
   return newObj;
 };
 
 const reduceData = (data, obj) => {
-  const { type, index} = obj;
+  const { type, index } = obj;
   let newObj = data;
   newObj[type][index].selected -= 1;
   return newObj;
@@ -41,7 +40,6 @@ const renderCartAdd = (data, obj) => {
   if (!data.includes(item)) {
     data.push(item);
   }
-  debugger;
   return data;
 };
 
@@ -79,24 +77,24 @@ const renderReduceSelect = (data, obj) => {
 };
 
 // 每次点击每次存放
-const saveTypeData = (commodityList, obj) =>{
-  const {text, data} = obj;
+const saveTypeData = (commodityList, obj) => {
+  const { text, data } = obj;
   let newObj = commodityList;
-  if(data.length){
+  if (data.length) {
     newObj[text] = data;
-    return newObj
+    return newObj;
   }
-  return newObj
-}
+  return newObj;
+};
 
 const handleResetCount = (obj) => {
-  Object.keys(obj).forEach(item=>{
-    obj[item].forEach(val=>{
-      val.selected = 0
-    })
-  })
-  return obj
-}
+  Object.keys(obj).forEach((item) => {
+    obj[item].forEach((val) => {
+      val.selected = 0;
+    });
+  });
+  return obj;
+};
 
 export default function Home(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -130,18 +128,18 @@ export default function Home(state = INITIAL_STATE, action) {
     case RESET_CART:
       return {
         ...state,
-        cartSum: []
+        cartSum: [],
       };
-    case SAVE_TYPE_DATA: 
+    case SAVE_TYPE_DATA:
       return {
         ...state,
-        commodityList: saveTypeData(state.commodityList, action.payload)
+        commodityList: saveTypeData(state.commodityList, action.payload),
       };
-    case RESET_SELECTED: 
-        return {
-          ...state,
-          commodityList: handleResetCount(state.commodityList)
-        }
+    case RESET_SELECTED:
+      return {
+        ...state,
+        commodityList: handleResetCount(state.commodityList),
+      };
     default:
       return state;
   }

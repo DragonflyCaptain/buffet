@@ -1,12 +1,18 @@
-import { CREATE_ORDER, DEL_ORDER, SAVE_ORDER_DATA } from "../constants/order";
+import {
+  CREATE_ORDER,
+  DEL_ORDER,
+  SAVE_ORDER_DATA,
+  UPDATE_STATE,
+} from "../constants/order";
 
 const INITIAL_STATE = {
   orderList: [],
+  isDeleteTips: false,
 };
 
 const handleCreateOrder = (oldData, newData) => {
-  oldData.push(newData)
-  return oldData
+  oldData.push(newData);
+  return oldData;
 };
 
 export default function Order(state = INITIAL_STATE, action) {
@@ -14,7 +20,7 @@ export default function Order(state = INITIAL_STATE, action) {
     case CREATE_ORDER:
       return {
         ...state,
-        orderList: handleCreateOrder(state.orderList, action.payload)
+        orderList: handleCreateOrder(state.orderList, action.payload),
       };
     case DEL_ORDER:
       return {
@@ -23,8 +29,15 @@ export default function Order(state = INITIAL_STATE, action) {
     case SAVE_ORDER_DATA:
       return {
         ...state,
-        orderList: action.payload
-      }
+        orderList: action.payload,
+      };
+    case UPDATE_STATE:
+      console.log(action.payload, "|||||||");
+      // return {
+      //   ...state,
+      //   orderList: action.payload,
+      // };
+      return Object.assign({}, state, action.payload);
     default:
       return state;
   }

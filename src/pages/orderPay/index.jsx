@@ -4,25 +4,24 @@ import { connect } from "@tarojs/redux";
 import { AtModal } from "taro-ui";
 import "./index.less";
 import { resetCart, resetSelected } from "../../actions/home";
-import { createOrder } from '../../actions/order'
+import { createOrder } from "../../actions/order";
 import * as api from "../../servers/servers";
 
 @connect(
   ({ Home, Order }) => ({
     Home,
-    Order
+    Order,
   }),
   (dispatch) => ({
     resetCart(payload) {
       dispatch(resetCart(payload));
     },
     resetSelected(payload) {
-      dispatch(resetSelected(payload))
+      dispatch(resetSelected(payload));
     },
     createOrder(payload) {
-      dispatch(createOrder(payload))
-    }
-    
+      dispatch(createOrder(payload));
+    },
   })
 )
 class OrderPay extends Component {
@@ -94,36 +93,38 @@ class OrderPay extends Component {
   };
 
   handleConfirm = async () => {
-    const { Home: { cartSum, userInfo } } = this.props
-    const { sum } = this.state
+    const {
+      Home: { cartSum, userInfo },
+    } = this.props;
+    const { sum } = this.state;
     let obj = {
       userInfo,
       productList: cartSum,
-      phoneNum: '8008208820',
-      address: '测试地址',
-      consignee: '测试收货人平小北',
+      phoneNum: "8008208820",
+      address: "测试地址",
+      consignee: "测试收货人平小北",
       priceTotal: sum,
-      remarks: '',
-      status: '1',  // 0：代付款  1：已完成  2：已取消
-      payMethod: '0', // 0: 微信支付  1： 支付宝
+      remarks: "",
+      status: "1", // 0：代付款  1：已完成  2：已取消
+      payMethod: "0", // 0: 微信支付  1： 支付宝
       productTotal: cartSum.length,
-    }
+    };
     Taro.showLoading({
       title: "付款中",
       mask: true,
     });
-    const { code } = await api.submitOrder(obj)
-    if( code === 0){
+    const { code } = await api.submitOrder(obj);
+    if (code === 0) {
       Taro.hideLoading();
       this.props.resetCart();
-      this.props.resetSelected()
+      this.props.resetSelected();
       Taro.navigateTo({
-        url: '../SuccessPage/index'
-      })
+        url: "../SuccessPage/index",
+      });
       this.setState({
         isShow: false,
       });
-    }else{
+    } else {
       Taro.hideLoading();
     }
   };
@@ -131,7 +132,7 @@ class OrderPay extends Component {
   render() {
     const {
       Home: { cartSum },
-      Order
+      Order,
     } = this.props;
     const { isShow, sum } = this.state;
     const img = {
@@ -158,7 +159,9 @@ class OrderPay extends Component {
             <Text className="price">{`¥${sum}`}</Text>
             {/* <View></View> */}
           </View>
-          <View className="pay-btn" onClick={this.payment}>微信支付</View>
+          <View className="pay-btn" onClick={this.payment}>
+            微信支付
+          </View>
         </View>
         <AtModal
           isOpened={isShow}

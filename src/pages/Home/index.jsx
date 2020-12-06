@@ -10,6 +10,9 @@ import {
 } from "../../actions/home";
 import { dataList } from "../../common/config";
 import * as api from "../../servers/servers";
+import GoodsType from "./components/goodsType";
+import Search from "./components/search";
+import { GOODSCONFIG } from "../../utils/goodsConfig";
 import "./index.less";
 
 const CartImg = require("../../assets/tab-bar/cart.png");
@@ -35,19 +38,19 @@ class Home extends Component {
   constructor() {
     super(...arguments);
     this.state = {
-      typeContent: "热搜推荐",
+      typeContent: "1",
       searchVal: "",
-      selected: ["热搜推荐"],
+      selected: ["1"],
     };
   }
 
   componentWillMount() {}
 
   requestHomeData = async (params, text = this.state.typeContent) => {
-    Taro.showLoading({
-      title: "loading",
-      mask: true,
-    });
+    // Taro.showLoading({
+    //   title: "loading",
+    //   mask: true,
+    // });
     const { code, data } = await api.clickTypeRequest(params);
     if (code === 0) {
       data.forEach((item) => {
@@ -58,7 +61,7 @@ class Home extends Component {
         data: data,
       };
       this.props.saveTypeData(obj);
-      Taro.hideLoading();
+      // Taro.hideLoading();
     }
   };
 
@@ -79,18 +82,18 @@ class Home extends Component {
 
   handleTypeClick(item) {
     let arr = this.state.selected;
-    if (!arr.includes(item)) {
-      arr.push(item);
+    if (!arr.includes(item.key)) {
+      arr.push(item.key);
       let params = {
-        category: item,
+        category: item.key,
       };
       this.setState({
         selected: arr,
       });
-      this.requestHomeData(params, item);
+      this.requestHomeData(params, item.key);
     }
     this.setState({
-      typeContent: item,
+      typeContent: item.key,
     });
   }
 
@@ -102,21 +105,22 @@ class Home extends Component {
 
   renderScrollList = (data, scrollItem) => {
     const { typeContent } = this.state;
-    if (data.length) {
-      return data.map((item) => {
+    return (
+      data &&
+      data.length &&
+      data.map((item) => {
         return (
           <View
             onClick={() => this.handleTypeClick(item)}
             style={scrollItem}
-            key={item}
-            className={typeContent === item ? "active" : ""}
+            key={item.key}
+            className={typeContent === item.key ? "active" : "goodsType"}
           >
-            {item}
+            {item.title}
           </View>
         );
-      });
-    }
-    // return <View style={scrollItem}></View>;
+      })
+    );
   };
 
   handlImgClick(item) {}
@@ -161,13 +165,13 @@ class Home extends Component {
           <View key={item.id} className="every-last">
             <View
               className="every-img"
-              onClick={() =>this.goToDetail(item, index, typeContent)}
+              onClick={() => this.goToDetail(item, index, typeContent)}
             >
               <Image src={item.url} style={img} />
             </View>
             <View className="every-title">
               <View className="title">
-                <View> 名称： {item.title}</View>
+                <View className="testTitle"> 名称： {item.title}</View>
                 <View> 价格： {item.price}</View>
                 <View className="addPic">
                   <View
@@ -199,28 +203,40 @@ class Home extends Component {
     });
   };
 
+  onActionClick = () => {};
+
   render() {
     const { typeContent, searchVal, selected, statusBarHeight } = this.state;
+    console.log(searchVal, "______");
     const scrollItem = {
       height: "30px",
       "font-size": "12px",
       padding: "3px",
       "line-height": "30px",
+      background: "#cacaca",
+      position: "renative",
     };
     const img = {
       width: "100%",
       height: "100%",
       "background-size": "100% 100%",
       "background-repeat": "no-repeat",
+      "border-top-left-radius": "5px",
+      "border-bottom-left-radius": "5px",
     };
     return (
       <View className="home-warp">
         <View className="search-warp">
-          <AtSearchBar value={searchVal} onChange={this.onChange} />
+          <AtSearchBar
+            showActionButton
+            onActionClick={this.onActionClick}
+            value={searchVal}
+            onChange={this.onChange}
+          />
         </View>
         <View className="content-warp">
           <View className="type">
-            {this.renderScrollList(dataList, scrollItem)}
+            {this.renderScrollList(GOODSCONFIG, scrollItem)}
           </View>
           <View className="type-detail">
             {this.renderTypeDetail("热搜推荐", img)}

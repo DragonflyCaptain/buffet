@@ -1,12 +1,12 @@
 import Taro, { Component } from "@tarojs/taro";
-import { Provider } from '@tarojs/redux'
+import { Provider } from "@tarojs/redux";
 import Index from "./pages/index";
-import configStore from './store'
+import configStore from "./store";
 
 import "./app.less";
-import 'taro-ui/dist/style/index.scss'
+import "taro-ui/dist/style/index.scss";
 
-const store = configStore()
+const store = configStore();
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -25,18 +25,19 @@ class App extends Component {
 
   config = {
     pages: [
-      'pages/Home/index',
-      'pages/Chat/component/room',
-      'pages/Chat/chat',
-      'pages/Cart/index',
-      'pages/User/index',
-      'pages/Order/order',
-      'pages/orderPay/index',
-      'pages/Address/addressList',
-      'pages/Address/editAddress',
-      'pages/About/about',
-      'pages/Entry/index',
-      'pages/SuccessPage/index',
+      "pages/Home/index",
+      "pages/Chat/component/room",
+      "pages/Chat/chat",
+      "pages/Cart/index",
+      "pages/User/index",
+      "pages/Order/order",
+      "pages/orderPay/index",
+      "pages/Address/addressList",
+      "pages/Address/editAddress",
+      "pages/About/about",
+      "pages/Entry/index",
+      "pages/SuccessPage/index",
+      "pages/commodityDetail/index",
     ],
     window: {
       backgroundTextStyle: "light",
@@ -56,11 +57,12 @@ class App extends Component {
           iconPath: "./assets/tab-bar/home.png",
           selectedIconPath: "./assets/tab-bar/homed.png",
           text: "首页",
-        },{
+        },
+        {
           pagePath: "pages/Cart/index",
           iconPath: "./assets/tab-bar/cart.png",
           selectedIconPath: "./assets/tab-bar/carted.png",
-          text: "购物车"
+          text: "购物车",
         },
         // {
         //   pagePath: "pages/Chat/chat",
@@ -73,7 +75,7 @@ class App extends Component {
           iconPath: "./assets/tab-bar/user.png",
           selectedIconPath: "./assets/tab-bar/userd.png",
           text: "我的",
-        }
+        },
       ],
     },
   };

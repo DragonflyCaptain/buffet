@@ -1,6 +1,7 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Text } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
+import { AtMessage } from "taro-ui";
 import { addCommodity } from "../../actions/home";
 import "./index.less";
 
@@ -24,6 +25,7 @@ class Detail extends Component {
 
   componentDidMount() {
     const { params } = this.$router.params;
+    // console.log(params, "{{{{{lll{");
     let obj = JSON.parse(params);
     this.setState({
       detail: obj,
@@ -41,7 +43,14 @@ class Detail extends Component {
   };
 
   addCart = () => {
-    console.log(this.state.detail, "detail");
+    const { cartSum } = this.props.Home;
+    const { detail } = this.state;
+    const isExist = cartSum.filter((item) => item.title === detail.name);
+    if (isExist.length) {
+      return Taro.atMessage({
+        message: "已经在购物车了",
+      });
+    }
     this.props.addCommodity(this.state.detail);
   };
 
@@ -58,6 +67,7 @@ class Detail extends Component {
     };
     return (
       <View>
+        <AtMessage />
         <View className="detail-warp">
           <View className="big-pic">
             {/* <View style={classe}></View> */}

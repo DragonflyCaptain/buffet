@@ -6,12 +6,10 @@ import "./index.less";
 export default class SuccessPage extends Component {
   constructor() {
     super(...arguments);
-    this.state = {
-    };
+    this.state = {};
   }
 
-  componentWillMount() {
-  }
+  componentWillMount() {}
 
   componentDidMount() {}
 
@@ -25,16 +23,16 @@ export default class SuccessPage extends Component {
     });
   };
 
-  viewCurrentOrder = () => {
-    console.log("查看当前订单");
-  };
+  viewCurrentOrder = () => {};
 
   render() {
     return (
       <View className="payment-success">
         <AtIcon value="check-circle" size="30"></AtIcon>支付成功
         <View className="btn-group">
-          <View onClick={this.goBack} className="go-back">返回首页</View>
+          <View onClick={this.goBack} className="go-back">
+            返回首页
+          </View>
           <View className="view-order">查看订单</View>
         </View>
       </View>

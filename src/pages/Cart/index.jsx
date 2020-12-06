@@ -6,7 +6,7 @@ import { addSelect, reduceSelect, saveUserInfo } from "../../actions/home";
 
 import "./index.less";
 
-const NOCART = require('../../assets/static/nocart.png');
+const NOCART = require("../../assets/static/nocart.png");
 
 @connect(
   ({ count, Home }) => ({
@@ -66,7 +66,6 @@ class Cart extends Component {
   };
 
   renderSelectedCart = (data, img) => {
-    console.log('最后渲染的是什么', data)
     return (
       data &&
       data.length &&
@@ -117,7 +116,7 @@ class Cart extends Component {
           url: `../orderPay/index?sum=${sum}`,
         });
       } else {
-        this.props.saveUserInfo({})
+        this.props.saveUserInfo({});
         Taro.switchTab({
           url: "../User/index",
         });
@@ -143,9 +142,11 @@ class Cart extends Component {
           title="购物车"
           thumb="http://www.logoquan.com/upload/list/20180421/logoquan15259400209.PNG"
         >
-          {
-            cartSum.length? this.renderSelectedCart(cartSum, img):<Image src={NOCART} />
-          }
+          {cartSum.length ? (
+            this.renderSelectedCart(cartSum, img)
+          ) : (
+            <Image src={NOCART} />
+          )}
         </AtCard>
         {cartSum.length ? (
           <View className="goToPay">

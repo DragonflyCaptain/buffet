@@ -9,7 +9,7 @@ export default class Index extends Component {
     super(...arguments);
     this.state = {
       formData: {
-        title: '', // 名字
+        title: "", // 名字
         stock: 100,
         url: "https://source.unsplash.com/random",
         price: 0,
@@ -47,11 +47,11 @@ export default class Index extends Component {
   }
   onSubmit = async () => {
     let obj = this.state.formData;
-    if(!obj.title || obj.title === ''){
+    if (!obj.title || obj.title === "") {
       return Taro.atMessage({
-        'message': '输入必填项后提交',
-        duration: 1000
-      })
+        message: "输入必填项后提交",
+        duration: 1000,
+      });
     }
     Taro.showLoading({
       title: "loading",
@@ -79,23 +79,23 @@ export default class Index extends Component {
 
   onScanning = () => {
     scanCode({
-      success: async res => {
-        console.log(res, '_______')
+      success: async (res) => {
+        // console.log(res, '_______')
         const { result } = res;
-        const response = await api.scanningTwo(result, 'scanning')
-        console.log(response, 'responseresponse')
+        const response = await api.scanningTwo(result, "scanning");
+        // console.log(response, 'responseresponse')
         this.setState({
           formData: {
-            title: response.result.goodsName , // 名字
+            title: response.result.goodsName, // 名字
             stock: 100,
             url: response.result.img,
             price: response.result.price,
             category: "",
           },
-        })
-      }
-    })
-  }
+        });
+      },
+    });
+  };
 
   render() {
     const { formData, selector } = this.state;
@@ -146,10 +146,11 @@ export default class Index extends Component {
           onChange={(value) => this.handleChange(value, "url")}
         />
         <View>
-          <AtButton style={{}} onClick={this.onScanning}>扫描</AtButton>
+          <AtButton style={{}} onClick={this.onScanning}>
+            扫描
+          </AtButton>
         </View>
         <AtButton onClick={this.onSubmit}>提交</AtButton>
-
       </View>
     );
   }

@@ -1,35 +1,31 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Button } from "@tarojs/components";
-import { AtTabs, AtTabsPane, AtModal } from "taro-ui";
+import { AtTabs, AtTabsPane, AtModal, AtToast } from "taro-ui";
 import { connect } from "@tarojs/redux";
-import * as api from '../../servers/servers';
-import { saveOrderData } from '../../actions/order'
+import day from "dayjs";
+import { deleteOrder, getOrderData } from "../../actions/order";
 import "./index.less";
+import { UPDATE_STATE } from "../../constants/order";
 
 const NULLIMG = require("../../assets/static/null.jpg");
-@connect(
-  ({ Order }) => ({
-    Order,
-  }),
-  (dispatch) => ({
-    saveOrderData(payload) {
-      dispatch(saveOrderData(payload))
-    }
-  })
-)
+const format = "YYYY-MM-DD HH:ss";
+@connect(({ Order }) => ({
+  Order,
+}))
 class Order extends Component {
   constructor() {
     super(...arguments);
     this.state = {
       current: 0,
       isShow: false,
+      currentOrder: {},
     };
   }
 
   componentWillMount() {}
 
   componentDidMount() {
-    this.getAllOrder()
+    this.getAllOrder();
   }
 
   componentWillUnmount() {}
@@ -42,9 +38,12 @@ class Order extends Component {
     navigationBarTitleText: "我的订单",
   };
 
-  getAllOrder = async () => {
-    const { code, data } = await api.findOrder()
-    this.props.saveOrderData(data)
+  getAllOrder() {
+    this.props.dispatch(
+      getOrderData({
+        enable: true,
+      })
+    );
   }
 
   handleClick = (value) => {
@@ -53,9 +52,10 @@ class Order extends Component {
     });
   };
 
-  handleDelete = () => {
+  handleDelete = (currentOrder) => {
     this.setState({
       isShow: true,
+      currentOrder,
     });
   };
 
@@ -66,13 +66,21 @@ class Order extends Component {
   };
 
   handleConfirm = () => {
+    const { currentOrder } = this.state;
+    this.props.dispatch({
+      type: UPDATE_STATE,
+      payload: {
+        isDeleteTips: true,
+      },
+    });
+    this.props.dispatch(deleteOrder({ id: currentOrder._id }));
     this.setState({
       isShow: false,
     });
   };
 
   goToEvaluation = () => {
-    console.log("我要去评价页面");
+    // console.log("我要去评价页面");
   };
 
   renderAll = (data) => {
@@ -80,11 +88,14 @@ class Order extends Component {
       data &&
       data.length &&
       data.map((item, index) => {
+        console.log(item, "______");
         return (
           <View className="com-all-warp" key={`*${index}`}>
             <View className="com-detail">
               <View className="com-title">
-                <View className="fo-l mg-l">店名</View>
+                <View className="fo-l mg-l">
+                  {day(item.orderTime).format(format)}
+                </View>
                 <View className="fo-r mg-r">{item.status}</View>
               </View>
               <View className="com-img">
@@ -95,7 +106,10 @@ class Order extends Component {
               </View>
             </View>
             <View className="com-btn">
-              <View className="order-btn mg-r" onClick={this.handleDelete}>
+              <View
+                className="order-btn mg-r"
+                onClick={() => this.handleDelete(item)}
+              >
                 删除
               </View>
               <View className="order-btn mg-r" onClick={this.goToEvaluation}>
@@ -109,13 +123,19 @@ class Order extends Component {
     );
   };
 
-  renderChild = data => {
-    return data && data.length && data.map((item, index)=>{
-      if(index<3){
-        return <Image className="testImage" src={item.url} key={item.title} />
-      }
-    })
-  }
+  renderChild = (data) => {
+    return (
+      data &&
+      data.length &&
+      data.map((item, index) => {
+        if (index < 3) {
+          return (
+            <Image className="testImage" src={item.url} key={item.title} />
+          );
+        }
+      })
+    );
+  };
 
   render() {
     const tabList = [
@@ -127,7 +147,7 @@ class Order extends Component {
     ];
     const { current, isShow } = this.state;
     const {
-      Order: { orderList },
+      Order: { orderList, isDeleteTips },
     } = this.props;
     return (
       <View className="order-warp">
@@ -138,13 +158,18 @@ class Order extends Component {
           onClick={this.handleClick}
         >
           <AtTabsPane current={current} index={0}>
-            {/* <View style="padding: 60px 10px;text-align: center;">
-              <Image src={NULLIMG}/>
-            </View> */}
             {orderList.length ? (
-              <View style="background-color: #FAFBFC;">
+              <View className="orderScroll">
                 {this.renderAll(orderList)}
-                <View style={{textAlign: 'center', marginTop: '20px', marginBottom: '20px'}}>已经没有更多订单了</View>
+                <View
+                  style={{
+                    textAlign: "center",
+                    marginTop: "20px",
+                    marginBottom: "20px",
+                  }}
+                >
+                  已经没有更多订单了
+                </View>
               </View>
             ) : (
               <View style="padding: 60px 10px;text-align: center;">
@@ -183,6 +208,7 @@ class Order extends Component {
           onConfirm={this.handleConfirm}
           content="您确认要删除该订单?"
         />
+        <AtToast isOpened={isDeleteTips} text="删除成功"></AtToast>
       </View>
     );
   }
