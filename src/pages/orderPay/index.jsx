@@ -3,7 +3,7 @@ import { View } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 import { AtModal } from "taro-ui";
 import "./index.less";
-import { resetCart, resetSelected } from "../../actions/home";
+import { resetCart, resetSelected, submitOrder } from "../../actions/home";
 import { createOrder } from "../../actions/order";
 import * as api from "../../servers/servers";
 
@@ -81,9 +81,28 @@ class OrderPay extends Component {
   };
 
   payment = () => {
-    this.setState({
-      isShow: true,
-    });
+    const {
+      Home: { cartList, userInfo },
+      dispatch,
+    } = this.props;
+    const { sum } = this.state;
+    let obj = {
+      userInfo,
+      productList: cartList,
+      phoneNum: "8008208820",
+      address: "测试地址",
+      consignee: "测试收货人平小北",
+      priceTotal: sum,
+      remarks: "",
+      status: "1", // 0：代付款  1：已完成  2：已取消
+      payMethod: "0", // 0: 微信支付  1： 支付宝
+      productTotal: cartList.length,
+    };
+
+    dispatch(submitOrder(obj));
+    // this.setState({
+    //   isShow: true,
+    // });
   };
 
   handleCancel = () => {
@@ -94,12 +113,13 @@ class OrderPay extends Component {
 
   handleConfirm = async () => {
     const {
-      Home: { cartSum, userInfo },
+      Home: { cartList, userInfo },
+      dispatch,
     } = this.props;
     const { sum } = this.state;
     let obj = {
       userInfo,
-      productList: cartSum,
+      productList: cartList,
       phoneNum: "8008208820",
       address: "测试地址",
       consignee: "测试收货人平小北",
@@ -107,26 +127,9 @@ class OrderPay extends Component {
       remarks: "",
       status: "1", // 0：代付款  1：已完成  2：已取消
       payMethod: "0", // 0: 微信支付  1： 支付宝
-      productTotal: cartSum.length,
+      productTotal: cartList.length,
     };
-    Taro.showLoading({
-      title: "付款中",
-      mask: true,
-    });
-    const { code } = await api.submitOrder(obj);
-    if (code === 0) {
-      Taro.hideLoading();
-      this.props.resetCart();
-      this.props.resetSelected();
-      Taro.navigateTo({
-        url: "../SuccessPage/index",
-      });
-      this.setState({
-        isShow: false,
-      });
-    } else {
-      Taro.hideLoading();
-    }
+    dispatch(submitOrder(obj));
   };
 
   render() {

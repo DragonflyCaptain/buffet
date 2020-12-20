@@ -1,21 +1,24 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Text, Image } from "@tarojs/components";
-import { AtAvatar, AtSearchBar, AtFab } from "taro-ui";
+import { AtLoadMore, AtSearchBar, AtActivityIndicator } from "taro-ui";
 import { connect } from "@tarojs/redux";
 import {
   addCommodity,
   reduceCommodity,
   saveUserInfo,
   saveTypeData,
+  getGoodsList,
+  loadMoreGoods,
 } from "../../actions/home";
-import { dataList } from "../../common/config";
 import * as api from "../../servers/servers";
-import GoodsType from "./components/goodsType";
-import Search from "./components/search";
+// import GoodsType from "./components/goodsType";
+// import Search from "./components/search";
 import { GOODSCONFIG } from "../../utils/goodsConfig";
 import "./index.less";
+import { UPDATE_STATE } from "../../constants/home";
 
 const CartImg = require("../../assets/tab-bar/cart.png");
+let i = 1;
 
 @connect(
   ({ Home }) => ({ Home }),
@@ -41,33 +44,37 @@ class Home extends Component {
       typeContent: "1",
       searchVal: "",
       selected: ["1"],
+      showActivity: false,
+      limit: 10,
+      page: 0,
+      count: 1,
     };
   }
 
   componentWillMount() {}
 
-  requestHomeData = async (params, text = this.state.typeContent) => {
+  requestHomeData = async (params, type = this.state.typeContent) => {
     // Taro.showLoading({
     //   title: "loading",
     //   mask: true,
     // });
-    const { code, data } = await api.clickTypeRequest(params);
-    if (code === 0) {
-      data.forEach((item) => {
-        item["selected"] = 0;
-      });
-      const obj = {
-        text,
-        data: data,
-      };
-      this.props.saveTypeData(obj);
-      // Taro.hideLoading();
-    }
+    const { dispatch } = this.props;
+    dispatch(
+      getGoodsList({
+        params,
+        type,
+      })
+    );
   };
 
   componentDidMount() {
-    const { typeContent } = this.state;
-    this.requestHomeData({ category: typeContent });
+    const { typeContent, limit, page } = this.state;
+    const obj = {
+      limit,
+      page,
+      category: typeContent,
+    };
+    this.requestHomeData(obj);
   }
 
   componentWillUnmount() {}
@@ -79,18 +86,25 @@ class Home extends Component {
   config = {
     navigationBarTitleText: "首页",
   };
-
   handleTypeClick(item) {
-    let arr = this.state.selected;
-    if (!arr.includes(item.key)) {
+    const { selectedCategory } = this.props.Home;
+    let arr = selectedCategory;
+    if (!selectedCategory.includes(item.key)) {
       arr.push(item.key);
-      let params = {
-        category: item.key,
-      };
-      this.setState({
-        selected: arr,
+      this.requestHomeData(
+        {
+          category: item.key,
+          limit: 10,
+          page: 0,
+        },
+        item.key
+      );
+      this.props.dispatch({
+        type: UPDATE_STATE,
+        payload: {
+          selectedCategory: arr,
+        },
       });
-      this.requestHomeData(params, item.key);
     }
     this.setState({
       typeContent: item.key,
@@ -125,12 +139,28 @@ class Home extends Component {
 
   handlImgClick(item) {}
 
-  addItem(item, index, type) {
-    this.props.addCommodity({
-      name: item.title,
-      type,
-      index,
-      item,
+  addItem(item, index) {
+    // this.props
+    let data = this.props.Home.cartList;
+    const isHave = data.filter((val) => val._id === item._id);
+    debugger;
+    if (isHave.length) {
+      data.forEach((val) => {
+        if (val._id === item._id) {
+          val.selected += 1;
+        }
+      });
+    } else {
+      data.push({
+        ...item,
+        selected: 1,
+      });
+    }
+    this.props.dispatch({
+      type: UPDATE_STATE,
+      payload: {
+        cartList: data,
+      },
     });
   }
   reduceItem(item, index, type) {
@@ -154,11 +184,26 @@ class Home extends Component {
     });
   };
 
+  handlLoadMoreClick = () => {
+    const { typeContent, limit, page, count } = this.state;
+    const { dispatch } = this.props;
+    let cnt = count;
+    const obj = {
+      limit,
+      page: cnt++,
+      category: typeContent,
+    };
+    dispatch(loadMoreGoods(typeContent, obj));
+    this.setState({
+      count: cnt,
+    });
+  };
+
   renderTypeDetail = (str, img) => {
     const { typeContent } = this.state;
     const { Home } = this.props;
-    const { commodityList } = Home;
-    let data = commodityList[typeContent] || [];
+    const { goodsListInfo } = Home;
+    let data = goodsListInfo[typeContent] || [];
     if (data.length) {
       return data.map((item, index) => {
         return (
@@ -175,18 +220,9 @@ class Home extends Component {
                 <View> 价格： {item.price}</View>
                 <View className="addPic">
                   <View
-                    className="test addImg"
+                    className="test addToCart"
                     onClick={() => this.addItem(item, index, typeContent)}
                   ></View>
-                  {item.selected !== 0 ? (
-                    <View className="test itemNum">{item.selected}</View>
-                  ) : null}
-                  {item.selected ? (
-                    <View
-                      className="test reduceImg "
-                      onClick={() => this.reduceItem(item, index, typeContent)}
-                    ></View>
-                  ) : null}
                 </View>
               </View>
             </View>
@@ -194,7 +230,6 @@ class Home extends Component {
         );
       });
     }
-    // return <Text>null</Text>;
   };
 
   goToCart = () => {
@@ -203,11 +238,20 @@ class Home extends Component {
     });
   };
 
-  onActionClick = () => {};
-
+  onActionClick = () => {
+    const params = JSON.stringify({
+      title: this.state.searchVal,
+    });
+    Taro.navigateTo({
+      url: `../components/searchPage?params=${params}`,
+    });
+  };
   render() {
-    const { typeContent, searchVal, selected, statusBarHeight } = this.state;
-    console.log(searchVal, "______");
+    const { searchVal, typeContent } = this.state;
+    const {
+      Home: { goodsListInfo, loadMore },
+    } = this.props;
+    console.log(this.props, "_____");
     const scrollItem = {
       height: "30px",
       "font-size": "12px",
@@ -240,6 +284,20 @@ class Home extends Component {
           </View>
           <View className="type-detail">
             {this.renderTypeDetail("热搜推荐", img)}
+            {goodsListInfo[typeContent] &&
+            goodsListInfo[typeContent].length >= 9 ? (
+              <AtLoadMore
+                moreBtnStyle={{
+                  color: "#000",
+                  border: "none",
+                  fontSize: 11,
+                }}
+                loadingText="加载中"
+                noMoreText="暂无更多"
+                onClick={this.handlLoadMoreClick}
+                status={loadMore}
+              />
+            ) : null}
           </View>
         </View>
         <View className="view-cart" onClick={this.goToCart}>

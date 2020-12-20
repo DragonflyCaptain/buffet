@@ -38,13 +38,14 @@ class App extends Component {
       "pages/Entry/index",
       "pages/SuccessPage/index",
       "pages/commodityDetail/index",
+      "pages/components/searchPage",
     ],
     window: {
       backgroundTextStyle: "light",
       navigationBarBackgroundColor: "#fff",
       navigationBarTitleText: "WeChat",
       navigationBarTextStyle: "black",
-      // navigationStyle: "custom"
+      // navigationStyle: "custom",
     },
     tabBar: {
       color: "#666",

@@ -1,3 +1,4 @@
+import Taro, { Component } from "@tarojs/taro";
 import {
   ADD_COMMODITY,
   REDUCE_COMMODITY,
@@ -10,8 +11,108 @@ import {
   RESET_SELECTED,
   GET_GOODS_DATA,
   UPDATE_STATE,
+  HANDLE_GOODS_DATA,
+  LOAD_MORE_GOODS,
 } from "../constants/home";
 import * as api from "../servers/servers";
+
+// 查询商品列表
+export const getGoodsList = (payload) => {
+  return (dispatch) => {
+    api
+      .clickTypeRequest(payload.params)
+      .then((res) => {
+        console.log(res, "result");
+        dispatch({
+          type: HANDLE_GOODS_DATA,
+          payload: {
+            type: payload.type,
+            data: res.data,
+          },
+        });
+      })
+      .catch((err) => console.log(err));
+  };
+};
+
+// 条件查询商品
+export const getSearchValueData = (payload) => {
+  return (dispatch) => {
+    api.clickTypeRequest(payload).then((res) => {
+      dispatch({
+        type: UPDATE_STATE,
+        payload: {
+          searchResultData: res.data,
+        },
+      });
+    });
+  };
+};
+
+// 付款
+export const submitOrder = (payload) => {
+  return async (dispatch) => {
+    Taro.showLoading({
+      title: "付款中",
+      mask: true,
+    });
+    const res = await api.submitOrder(payload);
+    console.log(res, "fukuan");
+    if (res && res.code === 0) {
+      Taro.hideLoading();
+      dispatch({
+        type: RESET_CART,
+      });
+    } else {
+      Taro.hideLoading();
+    }
+  };
+};
+
+// 读取更多
+export const loadMoreGoods = (type, params) => {
+  return async (dispatch) => {
+    dispatch({
+      type: UPDATE_STATE,
+      payload: {
+        loadMore: "loading",
+      },
+    });
+    const res = await api.clickTypeRequest(params);
+    if (res && res.code === 0) {
+      dispatch({
+        type: LOAD_MORE_GOODS,
+        payload: {
+          type,
+          data: res.data,
+        },
+      });
+      if (!res.data.length || res.data.length < 10) {
+        dispatch({
+          type: UPDATE_STATE,
+          payload: {
+            loadMore: "noMore",
+          },
+        });
+      } else {
+        dispatch({
+          type: UPDATE_STATE,
+          payload: {
+            loadMore: "more",
+          },
+        });
+      }
+    } else {
+      console.log("请求错误!");
+      dispatch({
+        type: UPDATE_STATE,
+        payload: {
+          loadMore: "more",
+        },
+      });
+    }
+  };
+};
 
 export const getFitrstTimeData = (payload) => {
   return (dispatch) => {

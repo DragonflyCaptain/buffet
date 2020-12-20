@@ -8,6 +8,9 @@ import {
   SAVE_TYPE_DATA,
   CACHE_TYPE,
   RESET_SELECTED,
+  UPDATE_STATE,
+  HANDLE_GOODS_DATA,
+  LOAD_MORE_GOODS,
 } from "../constants/home";
 
 function random(lower, upper) {
@@ -15,9 +18,15 @@ function random(lower, upper) {
 }
 
 const INITIAL_STATE = {
-  cartSum: [],
+  cartList: [],
   commodityList: {},
   userInfo: {},
+  searchResultData: [], // 搜索结果数据
+  goodsListInfo: {}, // 存放每个分类下的商品
+  selectedCategory: ["1"], // 存放已经点击过的分类数据
+  loadMore: "more",
+
+  // 付款页面
 };
 
 const addData = (state, obj) => {
@@ -97,50 +106,86 @@ const handleResetCount = (obj) => {
 };
 
 export default function Home(state = INITIAL_STATE, action) {
+  console.log(action, "action");
   switch (action.type) {
-    case ADD_COMMODITY:
+    // case ADD_COMMODITY:
+    //   return {
+    //     ...state,
+    //     // commodityList: addData(state.commodityList, action.payload),
+    //     cartSum: renderCartAdd(state.cartSum, action.payload),
+    //   };
+    // case REDUCE_COMMODITY:
+    //   return {
+    //     ...state,
+    //     commodityList: reduceData(state.commodityList, action.payload),
+    //     cartSum: renderCartReduce(state.cartSum, action.payload),
+    //   };
+    // case ADD_SELECT:
+    //   return {
+    //     ...state,
+    //     cartSum: renderAddSelect(state.cartSum, action.payload),
+    //   };
+    // case REDUCE_SELECT:
+    //   return {
+    //     ...state,
+    //     cartSum: renderReduceSelect(state.cartSum, action.payload),
+    //   };
+    // case SAVE_USER_INFO:
+    //   return {
+    //     ...state,
+    //     userInfo: action.payload,
+    //   };
+    // case RESET_CART:
+    //   return {
+    //     ...state,
+    //     cartSum: [],
+    //   };
+    // case SAVE_TYPE_DATA:
+    //   return {
+    //     ...state,
+    //     commodityList: saveTypeData(state.commodityList, action.payload),
+    //   };
+    // case RESET_SELECTED:
+    //   return {
+    //     ...state,
+    //     commodityList: handleResetCount(state.commodityList),
+    //   };
+    case UPDATE_STATE:
+      return Object.assign({}, state, action.payload);
+    case HANDLE_GOODS_DATA:
       return {
         ...state,
-        commodityList: addData(state.commodityList, action.payload),
-        cartSum: renderCartAdd(state.cartSum, action.payload),
-      };
-    case REDUCE_COMMODITY:
-      return {
-        ...state,
-        commodityList: reduceData(state.commodityList, action.payload),
-        cartSum: renderCartReduce(state.cartSum, action.payload),
-      };
-    case ADD_SELECT:
-      return {
-        ...state,
-        cartSum: renderAddSelect(state.cartSum, action.payload),
-      };
-    case REDUCE_SELECT:
-      return {
-        ...state,
-        cartSum: renderReduceSelect(state.cartSum, action.payload),
-      };
-    case SAVE_USER_INFO:
-      return {
-        ...state,
-        userInfo: action.payload,
+        goodsListInfo: handleGoodData(state.goodsListInfo, action.payload),
       };
     case RESET_CART:
       return {
         ...state,
-        cartSum: [],
+        cartList: [],
       };
-    case SAVE_TYPE_DATA:
+    case LOAD_MORE_GOODS:
       return {
         ...state,
-        commodityList: saveTypeData(state.commodityList, action.payload),
-      };
-    case RESET_SELECTED:
-      return {
-        ...state,
-        commodityList: handleResetCount(state.commodityList),
+        goodsListInfo: loadMoreGoods(state.goodsListInfo, action.payload),
       };
     default:
       return state;
   }
 }
+
+const handleGoodData = (oldData, newInfo) => {
+  let info = {
+    ...oldData,
+    [newInfo.type]: oldData[newInfo.type]
+      ? oldData[newInfo.type].concat(newInfo.data)
+      : [].concat(newInfo.data),
+  };
+  return info;
+};
+
+const loadMoreGoods = (preState, nextState) => {
+  let info = {
+    ...preState,
+    [nextState.type]: [...preState[nextState.type], ...nextState.data],
+  };
+  return info;
+};

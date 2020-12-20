@@ -17,3 +17,7 @@ export const RESET_SELECTED = "RESET_SELECTED";
 export const GET_GOODS_DATA = "get_goods_data";
 
 export const UPDATE_STATE = "update_state";
+
+export const HANDLE_GOODS_DATA = "handle_good_data";
+
+export const LOAD_MORE_GOODS = "load_more_goods";

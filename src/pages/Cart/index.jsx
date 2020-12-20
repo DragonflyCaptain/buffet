@@ -5,6 +5,7 @@ import { AtButton, AtCard, AtSwipeAction, AtList } from "taro-ui";
 import { addSelect, reduceSelect, saveUserInfo } from "../../actions/home";
 
 import "./index.less";
+import { UPDATE_STATE } from "../../constants/home";
 
 const NOCART = require("../../assets/static/nocart.png");
 
@@ -48,21 +49,36 @@ class Cart extends Component {
   };
 
   cartAdd = (item, index) => {
-    let obj = {
-      name: item.title,
-      index,
-      item,
-    };
-    this.props.add(obj);
+    const {
+      dispatch,
+      Home: { cartList },
+    } = this.props;
+    let data = cartList;
+    data[index].selected += 1;
+    dispatch({
+      type: UPDATE_STATE,
+      payload: {
+        cartList: data,
+      },
+    });
   };
 
   cartReduce = (item, index) => {
-    let obj = {
-      name: item.title,
-      index,
-      item,
-    };
-    this.props.dec(obj);
+    const {
+      dispatch,
+      Home: { cartList },
+    } = this.props;
+    let data = cartList;
+    data[index].selected -= 1;
+    if (data[index].selected < 1) {
+      data.splice(index, 1);
+    }
+    dispatch({
+      type: UPDATE_STATE,
+      payload: {
+        cartList: data,
+      },
+    });
   };
 
   renderSelectedCart = (data, img) => {
@@ -104,12 +120,12 @@ class Cart extends Component {
   goToPayPage = () => {
     // console.log('去结算了')
     const {
-      Home: { cartSum },
+      Home: { cartList },
     } = this.props;
     Taro.getSetting().then((res) => {
       if (res.authSetting["scope.userInfo"]) {
         let sum = 0;
-        cartSum.forEach((item) => {
+        cartList.forEach((item) => {
           sum += item.price * item.selected;
         });
         Taro.navigateTo({
@@ -124,9 +140,16 @@ class Cart extends Component {
     });
   };
 
+  calculationPriceSum = (data) => {
+    if (!data.length) return;
+    const sumData = data.map((item) => item.price * item.selected);
+    const priceSum = sumData.reduce((pre, next) => pre + next);
+    return priceSum;
+  };
+
   render() {
     const {
-      Home: { cartSum },
+      Home: { cartList },
     } = this.props;
     const img = {
       width: "100%",
@@ -138,20 +161,23 @@ class Cart extends Component {
       <View className="home">
         <AtCard
           // note="小Tips"
-          extra={`已选择${cartSum.length}件商品`}
+          extra={`已选择${cartList.length}件商品`}
           title="购物车"
           thumb="http://www.logoquan.com/upload/list/20180421/logoquan15259400209.PNG"
         >
-          {cartSum.length ? (
-            this.renderSelectedCart(cartSum, img)
+          {cartList.length ? (
+            this.renderSelectedCart(cartList, img)
           ) : (
             <Image src={NOCART} />
           )}
         </AtCard>
-        {cartSum.length ? (
+        {cartList.length ? (
           <View className="goToPay">
+            <View className="price_sum">
+              总计: {this.calculationPriceSum(cartList)}
+            </View>
             <View className="goToPayBtn" onClick={this.goToPayPage}>
-              去结算({cartSum.length})
+              去结算({cartList.length})
             </View>
           </View>
         ) : null}
